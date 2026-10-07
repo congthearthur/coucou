@@ -4,9 +4,9 @@ set -euo pipefail
 
 VERSION="${1:?Usage: $0 <version>}"
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-BUILD_DIR="/tmp/coucou-release-$VERSION"
-APP="$BUILD_DIR/Coucou.app"
-ZIP="$BUILD_DIR/Coucou.zip"
+BUILD_DIR="/tmp/heyllo-release-$VERSION"
+APP="$BUILD_DIR/Heyllo.app"
+ZIP="$BUILD_DIR/Heyllo.zip"
 
 # ── 1. Find Developer ID identity ─────────────────────────────────────────────
 IDENTITY=$(security find-identity -v -p codesigning | grep "Developer ID Application" | head -1 | sed 's/.*"\(Developer ID Application[^"]*\)".*/\1/')
@@ -17,13 +17,13 @@ fi
 echo "Signing with: $IDENTITY"
 
 # ── 2. xcodegen + Release build ───────────────────────────────────────────────
-cd "$REPO_ROOT/NotchBuddy"
+cd "$REPO_ROOT/Heyllo"
 xcodegen generate
 rm -rf "$BUILD_DIR" && mkdir -p "$BUILD_DIR"
 
 xcodebuild \
-  -project NotchBuddy.xcodeproj \
-  -scheme NotchBuddy \
+  -project Heyllo.xcodeproj \
+  -scheme Heyllo \
   -configuration Release \
   build \
   CODE_SIGN_IDENTITY="$IDENTITY" \
@@ -33,7 +33,7 @@ xcodebuild \
 
 # ── 3. Zip + notarize ─────────────────────────────────────────────────────────
 ditto -c -k --keepParent "$APP" "$ZIP"
-xcrun notarytool submit "$ZIP" --keychain-profile coucou-notary --wait
+xcrun notarytool submit "$ZIP" --keychain-profile heyllo-notary --wait
 
 # ── 4. Staple + verify ────────────────────────────────────────────────────────
 xcrun stapler staple "$APP"
@@ -49,20 +49,21 @@ cd "$REPO_ROOT"
 git tag "v$VERSION"
 git push origin "v$VERSION"
 
+# TODO(heyllo): set to your own GitHub repo
 gh release create "v$VERSION" "$ZIP" \
   --repo Louis-CFM/coucou \
-  --title "Coucou $VERSION" \
+  --title "Heyllo $VERSION" \
   --notes "$(cat <<EOF
 ## Install
 
-Download **Coucou.zip**, unzip and move **Coucou.app** to \`/Applications\`. Launch — no extra steps needed.
+Download **Heyllo.zip**, unzip and move **Heyllo.app** to \`/Applications\`. Launch — no extra steps needed.
 
 ## Build from source
 
 \`\`\`bash
 brew install xcodegen
 git clone https://github.com/Louis-CFM/coucou.git
-cd coucou/NotchBuddy && xcodegen && open NotchBuddy.xcodeproj
+cd coucou/Heyllo && xcodegen && open Heyllo.xcodeproj
 \`\`\`
 EOF
 )"

@@ -17,13 +17,13 @@ jobs:
         run: brew install xcodegen
 
       - name: Generate project
-        run: cd NotchBuddy && xcodegen
+        run: cd Heyllo && xcodegen
 
       - name: Build Release (no signing)
         run: |
           xcodebuild \
-            -project NotchBuddy/NotchBuddy.xcodeproj \
-            -scheme NotchBuddy \
+            -project Heyllo/Heyllo.xcodeproj \
+            -scheme Heyllo \
             -configuration Release \
             build \
             CODE_SIGNING_ALLOWED=NO \
