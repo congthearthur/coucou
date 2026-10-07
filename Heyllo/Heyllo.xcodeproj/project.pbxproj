@@ -16,6 +16,7 @@
 		20240532C3D5437DC427CBF8 /* SoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BD51FA34B3C1A722C7F25D /* SoundEngine.swift */; };
 		255F3FDD73A2987848A1A173 /* IslandScreenGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31BFA05E05A45B0CA4079BC /* IslandScreenGeometry.swift */; };
 		25885B633AAEFFCDF2EDC6D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8CB5432B2DC2142F58C099 /* AppDelegate.swift */; };
+		275B053420221BE82F671EB7 /* LexyGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBB06744498CBD0D8438C1F /* LexyGeometry.swift */; };
 		28DFBB24539739A9B51BFA88 /* NotionPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD5809B6F06DDE569B5C858 /* NotionPoller.swift */; };
 		2D920F1C939BFC20411AFF34 /* StripePoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886A4655E48596E9775FEF51 /* StripePoller.swift */; };
 		2ECE5EAEA98DAEC324DEA3B5 /* IslandTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9843D0F41943AEA754DD5CDE /* IslandTypes.swift */; };
@@ -37,6 +38,7 @@
 		61047BD953AC22EAE4E4A4BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF7C918AF7882BD992ED920E /* Assets.xcassets */; };
 		657EE035FE6872FFFD7E27F1 /* FileDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6CA8BEAD1FAA1B8C544236 /* FileDropView.swift */; };
 		67974867A711FC7A5DB47234 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF7C918AF7882BD992ED920E /* Assets.xcassets */; };
+		72274BC9BC983630E149BAA5 /* LexyGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBBB06744498CBD0D8438C1F /* LexyGeometry.swift */; };
 		78B11F33EAAFCB7E9EAAA433 /* UploadSequenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1679AF902D714AE7A65DB024 /* UploadSequenceEngine.swift */; };
 		78BB76B91160BD31B2A063B6 /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5B8F7CC58EAA25D495450F /* ClaudeService.swift */; };
 		78EECBBF38C205092C586D41 /* FileDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6CA8BEAD1FAA1B8C544236 /* FileDropView.swift */; };
@@ -109,6 +111,7 @@
 		DDD5809B6F06DDE569B5C858 /* NotionPoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionPoller.swift; sourceTree = "<group>"; };
 		DE6CA8BEAD1FAA1B8C544236 /* FileDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDropView.swift; sourceTree = "<group>"; };
 		EA5B8F7CC58EAA25D495450F /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
+		EBBB06744498CBD0D8438C1F /* LexyGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexyGeometry.swift; sourceTree = "<group>"; };
 		EBCDABF824457F04FE4EA786 /* BotCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotCanvasView.swift; sourceTree = "<group>"; };
 		EC3979F8A99BEF25E4AA1B69 /* DrawMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawMath.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -163,6 +166,7 @@
 				9843D0F41943AEA754DD5CDE /* IslandTypes.swift */,
 				5EC52CEDD00A5A6B399C8BB0 /* IslandViewContent.swift */,
 				748EAADD985B69637C06C12E /* IslandWindowController.swift */,
+				EBBB06744498CBD0D8438C1F /* LexyGeometry.swift */,
 				42B7BCC569F7BDD191851CAD /* N8nPoller.swift */,
 				DDD5809B6F06DDE569B5C858 /* NotionPoller.swift */,
 				35E28B60FC91B7CB45DCB1E8 /* PillCatalog.swift */,
@@ -308,6 +312,7 @@
 				2ECE5EAEA98DAEC324DEA3B5 /* IslandTypes.swift in Sources */,
 				ADE6540CD362A42D37ED940E /* IslandViewContent.swift in Sources */,
 				D3C2064BB3EAD9C68A44A838 /* IslandWindowController.swift in Sources */,
+				275B053420221BE82F671EB7 /* LexyGeometry.swift in Sources */,
 				303C70858019BAC3AC4CC3A8 /* N8nPoller.swift in Sources */,
 				28DFBB24539739A9B51BFA88 /* NotionPoller.swift in Sources */,
 				9BA6B40E9E37141A95615F3B /* PillCatalog.swift in Sources */,
@@ -346,6 +351,7 @@
 				47C66F91EB52D2D1043D5123 /* IslandTypes.swift in Sources */,
 				BD300B9E9CA955643559DD80 /* IslandViewContent.swift in Sources */,
 				3BC34209CB2AC2B01B1E698F /* IslandWindowController.swift in Sources */,
+				72274BC9BC983630E149BAA5 /* LexyGeometry.swift in Sources */,
 				4262A8498F82C85C51E29152 /* N8nPoller.swift in Sources */,
 				FC9CC3AC9D05D94F00C746D9 /* NotionPoller.swift in Sources */,
 				55483F330BE76742ACC6CE0A /* PillCatalog.swift in Sources */,

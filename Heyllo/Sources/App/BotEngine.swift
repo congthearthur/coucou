@@ -60,28 +60,11 @@ struct BotStateCfg {
     let sound: String?
 }
 
-enum EyeShape: String {
-    case pill, wide, dot, line, flat, happy, closed, spiral, heart, star, tired, wink, cup
-}
-
 enum BadgeType {
     case dots(CGColor)
     case bang(CGColor)
     case question(CGColor)
     case dot(CGColor)
-}
-
-// MARK: - Mochi track constants (from PISTES.mochi)
-
-enum MochiConst {
-    static let eyeW: CGFloat  = 0.25
-    static let eyeH: CGFloat  = 0.27
-    static let eyeSp: CGFloat = 0.37
-    static let eyeP: CGFloat  = -0.12
-    static let baseTop    = CGColor(red: 0.929, green: 0.929, blue: 0.937, alpha: 1)  // #EDEDEF
-    static let baseBottom = CGColor(red: 0.769, green: 0.773, blue: 0.792, alpha: 1)  // #C4C5CA
-    static let ink        = CGColor(red: 0.102, green: 0.082, blue: 0.071, alpha: 1)  // #1A1412
-    static let miniInk    = CGColor(red: 0.063, green: 0.075, blue: 0.102, alpha: 1)  // #10131A
 }
 
 // MARK: - Bot state configs
@@ -946,8 +929,8 @@ final class BotEngine: ObservableObject {
                     endPoint: CGPoint(x: -hew * 0.8, y: heh * 0.9)
                 ))
             } else {
-                let c0 = cgColorToTuple(MochiConst.baseTop)
-                let c1 = cgColorToTuple(MochiConst.baseBottom)
+                let c0 = cgColorToTuple(LexyConst.baseTop)
+                let c1 = cgColorToTuple(LexyConst.baseBottom)
                 handCtx.fill(handPath, with: .linearGradient(
                     Gradient(colors: [colorFromTuple(c0), colorFromTuple(c1)]),
                     startPoint: CGPoint(x: hew * 0.7, y: -heh * 0.85),
@@ -1056,8 +1039,8 @@ final class BotEngine: ObservableObject {
             ctx.fill(path, with: .color(Color(cgColor: bc)))
         } else {
             // Main bot: linear gradient body
-            let c0 = cgColorToTuple(MochiConst.baseTop)
-            let c1 = cgColorToTuple(MochiConst.baseBottom)
+            let c0 = cgColorToTuple(LexyConst.baseTop)
+            let c1 = cgColorToTuple(LexyConst.baseBottom)
             ctx.fill(path, with: .linearGradient(
                 Gradient(colors: [colorFromTuple(c0), colorFromTuple(c1)]),
                 startPoint: CGPoint(x: rx*0.7, y: -ry*0.85),
@@ -1120,8 +1103,8 @@ final class BotEngine: ObservableObject {
         ctx.clip(to: path)
 
         for sd in [-1.0, 1.0] {
-            let eyeYaw   = CGFloat(sd) * MochiConst.eyeSp + yaw
-            var eyePitch = MochiConst.eyeP + pitch + roll
+            let eyeYaw   = CGFloat(sd) * LexyConst.eyeSp + yaw
+            var eyePitch = LexyConst.eyeP + pitch + roll
             // Wrap pitch for roll-through effect
             eyePitch = ((eyePitch + .pi).truncatingRemainder(dividingBy: .pi*2) + .pi*2).truncatingRemainder(dividingBy: .pi*2) - .pi
 
@@ -1135,8 +1118,8 @@ final class BotEngine: ObservableObject {
             let fy = lerp(max(0.18, cp),          1, morph * 0.7)
 
             let eyeMult: CGFloat = isMini ? 1.9 : 1.0
-            let ew = R * MochiConst.eyeW * es * eyeMult
-            let eh = R * MochiConst.eyeH * es * eyeMult
+            let ew = R * LexyConst.eyeW * es * eyeMult
+            let eh = R * LexyConst.eyeH * es * eyeMult
 
             var eyeCtx = ctx
             eyeCtx.translateBy(x: ex, y: ey)
@@ -1146,7 +1129,7 @@ final class BotEngine: ObservableObject {
     }
 
     private func drawEyeShape(ctx: inout GraphicsContext, shape: EyeShape, w: CGFloat, h: CGFloat, open: CGFloat, sd: CGFloat, R: CGFloat) {
-        let ink = isMini ? Color(cgColor: MochiConst.miniInk) : Color(cgColor: MochiConst.ink)
+        let ink = isMini ? Color(cgColor: LexyConst.miniInk) : Color(cgColor: LexyConst.ink)
         let now = CGFloat(CACurrentMediaTime())
 
         switch shape {

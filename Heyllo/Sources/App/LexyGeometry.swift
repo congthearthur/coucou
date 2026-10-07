@@ -1,0 +1,216 @@
+import Foundation
+import CoreGraphics
+import SwiftUI
+
+// MARK: - Eye shape vocabulary (moved from BotEngine.swift — shared renderer vocabulary,
+// also consumed by IslandTypes.swift's `miniEye`)
+
+enum EyeShape: String {
+    case pill, wide, dot, line, flat, happy, closed, spiral, heart, star, tired, wink, cup
+}
+
+// MARK: - Lexy tunable constants (renamed from MochiConst, same values)
+
+enum LexyConst {
+    static let eyeW: CGFloat  = 0.25
+    static let eyeH: CGFloat  = 0.27
+    static let eyeSp: CGFloat = 0.37
+    static let eyeP: CGFloat  = -0.12
+    static let baseTop    = CGColor(red: 0.929, green: 0.929, blue: 0.937, alpha: 1)  // #EDEDEF
+    static let baseBottom = CGColor(red: 0.769, green: 0.773, blue: 0.792, alpha: 1)  // #C4C5CA
+    static let ink        = CGColor(red: 0.102, green: 0.082, blue: 0.071, alpha: 1)  // #1A1412
+    static let miniInk    = CGColor(red: 0.063, green: 0.075, blue: 0.102, alpha: 1)  // #10131A
+    // Lexy's signature accessory: a small dark navy bowtie, the one "lawyer but cute" cue.
+    static let bowtieColor = CGColor(red: 0.11, green: 0.12, blue: 0.16, alpha: 1)
+}
+
+// MARK: - LexyFrame: the one snapshot type every call site builds and LexyGeometry consumes.
+// No function below reaches back into BotEngine, GreetPose, or USFrame — everything it needs
+// to draw one frame is in this struct.
+
+struct LexyFrame {
+    var rx: CGFloat               // body half-width (world units, already scaled by caller)
+    var ry: CGFloat               // body half-height
+    var morph: CGFloat            // 0 = round dot-cluster face, 1 = compact box (upload mode)
+    var eye: EyeShape
+    var eyeOpen: CGFloat          // 0 = fully closed (blink), 1 = fully open
+    var lookX: CGFloat            // -1...1, eye-cluster offset (pupil/gaze direction)
+    var lookY: CGFloat
+    var tint: CGFloat             // 0...1 color wash strength (state color, e.g. "thinking" purple)
+    var tintColor: CGColor?       // nil = no tint
+    var bodyColor: CGColor?       // nil = default LexyConst.baseTop/baseBottom gradient
+    var blush: CGFloat            // 0...1
+    var showBowtie: Bool          // hidden while morphing into box mode, like the body's extras
+    var handsAmount: CGFloat      // 0...1, how present the hands are (0 = none drawn)
+}
+
+// MARK: - Dot-cluster face geometry
+
+/// The face silhouette is a loose ring of overlapping dots whose union reads as one rounded
+/// face, interpolated (via `morph`) toward a tighter rectangular dot grid for "box mode"
+/// (the upload/mailbox animation). Returns one CGPath that is the union of all face dots —
+/// used both to fill the body and to clip the eyes/bowtie to the face.
+func lexyFacePath(rx: CGFloat, ry: CGFloat, morph: CGFloat) -> CGPath {
+    let path = CGMutablePath()
+    let dotRadius = min(rx, ry) * 0.30
+    let roundPositions = lexyRingDotPositions(rx: rx * 0.78, ry: ry * 0.78, count: 10)
+    let boxPositions = lexyGridDotPositions(rx: rx * 0.86, ry: ry * 0.86, cols: 5, rows: 3)
+    let count = min(roundPositions.count, boxPositions.count)
+    for i in 0..<count {
+        let p0 = roundPositions[i % roundPositions.count]
+        let p1 = boxPositions[i % boxPositions.count]
+        let x = lerp(p0.x, p1.x, morph)
+        let y = lerp(p0.y, p1.y, morph)
+        let r = dotRadius * lerp(1.0, 0.82, morph)
+        path.addEllipse(in: CGRect(x: x - r, y: y - r, width: r * 2, height: r * 2))
+    }
+    return path
+}
+
+private func lexyRingDotPositions(rx: CGFloat, ry: CGFloat, count: Int) -> [CGPoint] {
+    (0..<count).map { i in
+        let a = (CGFloat(i) / CGFloat(count)) * .pi * 2
+        return CGPoint(x: cos(a) * rx, y: sin(a) * ry)
+    }
+}
+
+private func lexyGridDotPositions(rx: CGFloat, ry: CGFloat, cols: Int, rows: Int) -> [CGPoint] {
+    var points: [CGPoint] = []
+    for row in 0..<rows {
+        for col in 0..<cols {
+            let fx = cols == 1 ? 0 : CGFloat(col) / CGFloat(cols - 1) * 2 - 1
+            let fy = rows == 1 ? 0 : CGFloat(row) / CGFloat(rows - 1) * 2 - 1
+            points.append(CGPoint(x: fx * rx, y: fy * ry))
+        }
+    }
+    return points
+}
+
+// MARK: - Eyes: each EyeShape maps to a small dot arrangement, not a single pupil
+
+private func lexyEyeDotOffsets(for shape: EyeShape) -> [CGPoint] {
+    switch shape {
+    case .pill, .wide, .flat:
+        return [CGPoint(x: -0.05, y: 0), CGPoint(x: 0.05, y: 0)]   // two dots, side by side
+    case .dot, .line, .closed, .tired:
+        return [CGPoint(x: 0, y: 0)]                                // single dot
+    case .happy, .wink:
+        return [CGPoint(x: -0.04, y: -0.02), CGPoint(x: 0.04, y: -0.02)]
+    case .spiral, .star, .heart:
+        return [CGPoint(x: -0.05, y: 0), CGPoint(x: 0, y: -0.04), CGPoint(x: 0.05, y: 0)]
+    case .cup:
+        return [CGPoint(x: -0.05, y: 0.03), CGPoint(x: 0.05, y: 0.03)]
+    }
+}
+
+/// Draws the two eye-dot-clusters, clipped to the face path, offset by lookX/lookY.
+func drawLexyEyes(cg: CGContext, frame: LexyFrame, rx: CGFloat, ry: CGFloat) {
+    let eyeDotR = min(rx, ry) * LexyConst.eyeH * 0.22 * max(0.15, frame.eyeOpen)
+    let sp = ry * LexyConst.eyeSp
+    let baseY = ry * LexyConst.eyeP + frame.lookY * ry * 0.18
+    let lookOffsetX = frame.lookX * rx * 0.12
+
+    for side: CGFloat in [-1, 1] {
+        let centerX = side * sp + lookOffsetX
+        let offsets = lexyEyeDotOffsets(for: frame.eye)
+        for offset in offsets {
+            let x = centerX + offset.x * rx
+            let y = baseY + offset.y * ry
+            cg.setFillColor(frame.bodyColor != nil ? LexyConst.ink : LexyConst.ink)
+            cg.fillEllipse(in: CGRect(x: x - eyeDotR, y: y - eyeDotR, width: eyeDotR * 2, height: eyeDotR * 2))
+        }
+    }
+}
+
+/// Lexy's signature bowtie: two small triangular dots either side of a center dot, drawn
+/// beneath the face. Hidden while morphing into box mode, same as the rest of the "extras."
+private func drawLexyBowtie(cg: CGContext, frame: LexyFrame, rx: CGFloat, ry: CGFloat) {
+    guard frame.showBowtie, frame.morph < 0.5 else { return }
+    let alpha = 1 - frame.morph * 2
+    let bowY = ry * 0.62
+    let wingR = min(rx, ry) * 0.10
+    let centerR = wingR * 0.55
+
+    cg.saveGState()
+    cg.setAlpha(alpha)
+    cg.setFillColor(LexyConst.bowtieColor)
+    cg.fillEllipse(in: CGRect(x: -wingR * 1.6 - wingR, y: bowY - wingR, width: wingR * 2, height: wingR * 2))
+    cg.fillEllipse(in: CGRect(x: wingR * 1.6 - wingR, y: bowY - wingR, width: wingR * 2, height: wingR * 2))
+    cg.fillEllipse(in: CGRect(x: -centerR, y: bowY - centerR, width: centerR * 2, height: centerR * 2))
+    cg.restoreGState()
+}
+
+// MARK: - Public entry point
+
+/// Draws one frame of Lexy: body (dot cluster), tint wash, eyes, bowtie. Callers are
+/// responsible for translating/rotating/scaling `cg` to the character's world position before
+/// calling this — this function draws entirely in body-centered local coordinates, matching
+/// how the original BotEngine.mochiPath/GreetingCanvasView.mochiPath callers already work.
+func drawLexyFace(cg: CGContext, frame: LexyFrame) {
+    let facePath = lexyFacePath(rx: frame.rx, ry: frame.ry, morph: frame.morph)
+
+    cg.saveGState()
+    cg.addPath(facePath)
+    cg.clip()
+
+    let topColor = frame.bodyColor ?? LexyConst.baseTop
+    let bottomColor = frame.bodyColor != nil ? mixDarker(frame.bodyColor!) : LexyConst.baseBottom
+    if let gradient = CGGradient(colorsSpace: CGColorSpaceCreateDeviceRGB(),
+                                  colors: [topColor, bottomColor] as CFArray,
+                                  locations: [0, 1]) {
+        cg.drawLinearGradient(gradient,
+                               start: CGPoint(x: 0, y: -frame.ry),
+                               end: CGPoint(x: 0, y: frame.ry),
+                               options: [])
+    }
+
+    if frame.tint > 0, let tintColor = frame.tintColor {
+        cg.setFillColor(tintColor.copy(alpha: frame.tint) ?? tintColor)
+        cg.addPath(facePath)
+        cg.fillPath()
+    }
+
+    if frame.blush > 0.01 {
+        cg.setFillColor(CGColor(red: 1, green: 0.55, blue: 0.55, alpha: Double(frame.blush) * 0.35))
+        let blushR = frame.rx * 0.12
+        for side: CGFloat in [-1, 1] {
+            let x = side * frame.rx * 0.55
+            let y = frame.ry * 0.25
+            cg.fillEllipse(in: CGRect(x: x - blushR, y: y - blushR, width: blushR * 2, height: blushR * 2))
+        }
+    }
+    cg.restoreGState()
+
+    drawLexyEyes(cg: cg, frame: frame, rx: frame.rx, ry: frame.ry)
+    drawLexyBowtie(cg: cg, frame: frame, rx: frame.rx, ry: frame.ry)
+}
+
+private func mixDarker(_ color: CGColor) -> CGColor {
+    let t = cgColorToTuple(color)
+    let darker = mix3(t, (0, 0, 0), 0.18)
+    return colorFromTuple(darker)
+}
+
+// MARK: - Hands (dot-cluster form, replaces BotEngine's ellipse hands and
+// GreetingCanvasView's drawHandL/drawHandR)
+
+func drawLexyHands(cg: CGContext, frame: LexyFrame, rx: CGFloat, ry: CGFloat) {
+    guard frame.handsAmount > 0.01 else { return }
+    let handR = min(rx, ry) * 0.16 * frame.handsAmount
+    for side: CGFloat in [-1, 1] {
+        let x = side * rx * 1.08
+        let y = ry * 0.70
+        cg.setFillColor((frame.bodyColor ?? LexyConst.baseTop))
+        cg.fillEllipse(in: CGRect(x: x - handR, y: y - handR, width: handR * 2, height: handR * 2))
+        cg.setStrokeColor(CGColor(red: 0, green: 0, blue: 0, alpha: 0.08))
+        cg.setLineWidth(1)
+        cg.strokeEllipse(in: CGRect(x: x - handR, y: y - handR, width: handR * 2, height: handR * 2))
+    }
+}
+
+/// Narrow entry point for callers (like the upload sequence) that draw their own body and
+/// only need Lexy's eye-dot cluster drawn at the origin, already clipped/positioned by the
+/// caller.
+func drawLexyEyeDotsOnly(cg: CGContext, frame: LexyFrame, rx: CGFloat, ry: CGFloat) {
+    drawLexyEyes(cg: cg, frame: frame, rx: rx, ry: ry)
+}
