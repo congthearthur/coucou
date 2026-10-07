@@ -188,7 +188,7 @@ func drawLexyFace(cg: CGContext, frame: LexyFrame) {
 private func mixDarker(_ color: CGColor) -> CGColor {
     let t = cgColorToTuple(color)
     let darker = mix3(t, (0, 0, 0), 0.18)
-    return colorFromTuple(darker)
+    return CGColor(red: darker.0, green: darker.1, blue: darker.2, alpha: 1)
 }
 
 // MARK: - Hands (dot-cluster form, replaces BotEngine's ellipse hands and
