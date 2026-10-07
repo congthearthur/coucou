@@ -147,8 +147,8 @@ struct UploadCanvasView: View {
             drawChooseView(ctx: &c, f: f)
         }
 
-        // ── Mochi ─────────────────────────────────────────────────
-        drawMochi(ctx: &c, f: f)
+        // ── Lexy ──────────────────────────────────────────────────
+        drawLexy(ctx: &c, f: f)
 
         // ── File / suction ────────────────────────────────────────
         if f.fileVisible { drawFile(ctx: &c, f: f) }
@@ -290,9 +290,9 @@ struct UploadCanvasView: View {
         cCtx.draw(btn2, at: CGPoint(x:350, y:126), anchor: .center)
     }
 
-    // MARK: - Mochi (superellipse body + eyes + mouth)
+    // MARK: - Lexy (box-morph body + eyes + mouth)
 
-    private func drawMochi(ctx: inout GraphicsContext, f: USFrame) {
+    private func drawLexy(ctx: inout GraphicsContext, f: USFrame) {
         let R  = f.d / 2 / 1.04
         let m  = f.morph
         let mc = max(0, min(m, 1.0))

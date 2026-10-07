@@ -858,13 +858,13 @@ final class BotEngine: ObservableObject {
         // (We'll pass world-space cx/cy to these helpers)
     }
 
-    // MARK: - Draw hands behind body (called before draw() so hands appear under Mochi)
+    // MARK: - Draw hands behind body (called before draw() so hands appear under Lexy)
 
     func drawHandsBehind(context: GraphicsContext, size: CGSize) {
         guard hands > 0.01, !isMini else { return }
         let W = size.width, H = size.height
         let R = W * 0.3
-        // Only draw hands when Mochi is large enough to be meaningful (not compact/peek)
+        // Only draw hands when Lexy is large enough to be meaningful (not compact/peek)
         guard R > 14 else { return }
         let rx = R * 1.14
         let ry = R * 0.88

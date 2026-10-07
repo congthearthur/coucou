@@ -27,7 +27,7 @@ private enum GT {
 
 // MARK: - Geometry constants (640×150 reference space)
 
-private let GC0     = CGPoint(x: 320, y: 90)   // Mochi center
+private let GC0     = CGPoint(x: 320, y: 90)   // Lexy center
 private let GHB:    CGFloat = 58                // body height at full size
 private let GASP:   CGFloat = 1.34             // body width/height ratio
 private let GEAR_X: CGFloat = 40               // ear x from small island left edge (matches BotPlacement compact x=40)
@@ -241,7 +241,7 @@ private func gRR(_ ctx: CGContext, _ x: CGFloat, _ y: CGFloat, _ w: CGFloat, _ h
     ctx.closePath()
 }
 
-private func drawMochi(_ ctx: CGContext, p: GreetPose) {
+private func drawLexy(_ ctx: CGContext, p: GreetPose) {
     let hh = CGFloat(p.hb/2), hw = hh*GASP; guard hh > 0.4 else { return }
 
     // Halo (golden → blue) — soft diffuse aura, two-pass for smoothness
@@ -433,7 +433,7 @@ private func drawGreeting(_ ctx: CGContext, size: CGSize, t: Double, tc: Double,
 
     // drawHeader: no icons during greeting
     drawMinis(ctx, alpha: p.minis, compact: compact)
-    drawMochi(ctx, p: p)
+    drawLexy(ctx, p: p)
 }
 
 // MARK: - SwiftUI View
