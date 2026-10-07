@@ -21,11 +21,12 @@
 		2ECE5EAEA98DAEC324DEA3B5 /* IslandTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9843D0F41943AEA754DD5CDE /* IslandTypes.swift */; };
 		303C70858019BAC3AC4CC3A8 /* N8nPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B7BCC569F7BDD191851CAD /* N8nPoller.swift */; };
 		3197B89CCD203E87F084AD40 /* BotCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCDABF824457F04FE4EA786 /* BotCanvasView.swift */; };
-		350D39F0316A773F7C70A4BC /* NotchBuddyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C271D9B599FC670B3574794 /* NotchBuddyApp.swift */; };
+		319932F57812E07382427874 /* HeylloApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1797B7EC50A76C2EC95EFF /* HeylloApp.swift */; };
 		3BC34209CB2AC2B01B1E698F /* IslandWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748EAADD985B69637C06C12E /* IslandWindowController.swift */; };
 		3DFBE8A50559DD3A5B491ACC /* ResendPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6800D9F85B49B05DEB7104F2 /* ResendPoller.swift */; };
 		4262A8498F82C85C51E29152 /* N8nPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B7BCC569F7BDD191851CAD /* N8nPoller.swift */; };
 		42B0CCCC39FDCF9AA8049456 /* BotEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82D1F74DAE31AEBBD6A6A02 /* BotEngine.swift */; };
+		42C54BE683B9BEF3FEF1F882 /* HeylloApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1797B7EC50A76C2EC95EFF /* HeylloApp.swift */; };
 		47C66F91EB52D2D1043D5123 /* IslandTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9843D0F41943AEA754DD5CDE /* IslandTypes.swift */; };
 		4A4E3F23CAEF75A16AA81393 /* VercelPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1AF9BBCA06C760B8BF4961 /* VercelPoller.swift */; };
 		4CEA81C2F1BFE48CDE6706CD /* IslandRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D2613174EA243AC450C080 /* IslandRootView.swift */; };
@@ -64,7 +65,6 @@
 		E6167C2BDD117724928BB94E /* HookServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DDAA82F3F7FB545681324B /* HookServer.swift */; };
 		E96ABBC41C6137516932FF78 /* IslandScreenGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31BFA05E05A45B0CA4079BC /* IslandScreenGeometry.swift */; };
 		EABE8DE17065D7BDB5B15342 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = AC42619FECAE053E0E17EEB5 /* sounds */; };
-		EC365210A461A1BD46155525 /* NotchBuddyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C271D9B599FC670B3574794 /* NotchBuddyApp.swift */; };
 		EEB8CF6C0716A40B2E98B245 /* UploadCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354A45A3A64A56B73D833556 /* UploadCanvasView.swift */; };
 		EF87AB9F72A9B09E4D60207D /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = AC42619FECAE053E0E17EEB5 /* sounds */; };
 		F460A72BE4E999C24E72B832 /* BotCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCDABF824457F04FE4EA786 /* BotCanvasView.swift */; };
@@ -90,11 +90,11 @@
 		908B50F048A505A563E8CCFE /* GithubPoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubPoller.swift; sourceTree = "<group>"; };
 		9843D0F41943AEA754DD5CDE /* IslandTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslandTypes.swift; sourceTree = "<group>"; };
 		9A1AF9BBCA06C760B8BF4961 /* VercelPoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VercelPoller.swift; sourceTree = "<group>"; };
-		9C271D9B599FC670B3574794 /* NotchBuddyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchBuddyApp.swift; sourceTree = "<group>"; };
 		9F643B3BF9F2B01705640D8A /* Heyllo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Heyllo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F9C99D661C332A40744DD5F /* IslandStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslandStateMachine.swift; sourceTree = "<group>"; };
 		A039221E982BC1A94B5BBADF /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
 		A8C74B35163A2A0D0F51415B /* SafeWebURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeWebURL.swift; sourceTree = "<group>"; };
+		AC1797B7EC50A76C2EC95EFF /* HeylloApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeylloApp.swift; sourceTree = "<group>"; };
 		AC42619FECAE053E0E17EEB5 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sounds; path = Resources/sounds; sourceTree = SOURCE_ROOT; };
 		AF7C918AF7882BD992ED920E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B31BFA05E05A45B0CA4079BC /* IslandScreenGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslandScreenGeometry.swift; sourceTree = "<group>"; };
@@ -151,6 +151,7 @@
 				DE6CA8BEAD1FAA1B8C544236 /* FileDropView.swift */,
 				908B50F048A505A563E8CCFE /* GithubPoller.swift */,
 				DBD4F6579FD20610B45E7148 /* GreetingCanvasView.swift */,
+				AC1797B7EC50A76C2EC95EFF /* HeylloApp.swift */,
 				C9DDAA82F3F7FB545681324B /* HookServer.swift */,
 				23D2613174EA243AC450C080 /* IslandRootView.swift */,
 				B31BFA05E05A45B0CA4079BC /* IslandScreenGeometry.swift */,
@@ -159,7 +160,6 @@
 				5EC52CEDD00A5A6B399C8BB0 /* IslandViewContent.swift */,
 				748EAADD985B69637C06C12E /* IslandWindowController.swift */,
 				42B7BCC569F7BDD191851CAD /* N8nPoller.swift */,
-				9C271D9B599FC670B3574794 /* NotchBuddyApp.swift */,
 				DDD5809B6F06DDE569B5C858 /* NotionPoller.swift */,
 				35E28B60FC91B7CB45DCB1E8 /* PillCatalog.swift */,
 				6800D9F85B49B05DEB7104F2 /* ResendPoller.swift */,
@@ -295,6 +295,7 @@
 				657EE035FE6872FFFD7E27F1 /* FileDropView.swift in Sources */,
 				D0E525593FFF79487B20CBFE /* GithubPoller.swift in Sources */,
 				B4C10CCA97E4D98453FD76DB /* GreetingCanvasView.swift in Sources */,
+				319932F57812E07382427874 /* HeylloApp.swift in Sources */,
 				5E38D4C5F79E10666DB83344 /* HookServer.swift in Sources */,
 				4CEA81C2F1BFE48CDE6706CD /* IslandRootView.swift in Sources */,
 				255F3FDD73A2987848A1A173 /* IslandScreenGeometry.swift in Sources */,
@@ -303,7 +304,6 @@
 				ADE6540CD362A42D37ED940E /* IslandViewContent.swift in Sources */,
 				D3C2064BB3EAD9C68A44A838 /* IslandWindowController.swift in Sources */,
 				303C70858019BAC3AC4CC3A8 /* N8nPoller.swift in Sources */,
-				350D39F0316A773F7C70A4BC /* NotchBuddyApp.swift in Sources */,
 				28DFBB24539739A9B51BFA88 /* NotionPoller.swift in Sources */,
 				9BA6B40E9E37141A95615F3B /* PillCatalog.swift in Sources */,
 				3DFBE8A50559DD3A5B491ACC /* ResendPoller.swift in Sources */,
@@ -332,6 +332,7 @@
 				78EECBBF38C205092C586D41 /* FileDropView.swift in Sources */,
 				FBEDE6E4258A53CF4335D2A2 /* GithubPoller.swift in Sources */,
 				FB6C2818B2A809C27A5C01C6 /* GreetingCanvasView.swift in Sources */,
+				42C54BE683B9BEF3FEF1F882 /* HeylloApp.swift in Sources */,
 				E6167C2BDD117724928BB94E /* HookServer.swift in Sources */,
 				8C83A3F6E5181B870457CCF8 /* IslandRootView.swift in Sources */,
 				E96ABBC41C6137516932FF78 /* IslandScreenGeometry.swift in Sources */,
@@ -340,7 +341,6 @@
 				BD300B9E9CA955643559DD80 /* IslandViewContent.swift in Sources */,
 				3BC34209CB2AC2B01B1E698F /* IslandWindowController.swift in Sources */,
 				4262A8498F82C85C51E29152 /* N8nPoller.swift in Sources */,
-				EC365210A461A1BD46155525 /* NotchBuddyApp.swift in Sources */,
 				FC9CC3AC9D05D94F00C746D9 /* NotionPoller.swift in Sources */,
 				55483F330BE76742ACC6CE0A /* PillCatalog.swift in Sources */,
 				9C95820D1B270DDA7A72468F /* ResendPoller.swift in Sources */,
