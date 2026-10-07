@@ -371,42 +371,24 @@ struct UploadCanvasView: View {
 
         var eCtx = c
         eCtx.clip(to: bp)
+        let mappedEye: EyeShape = {
+            switch f.eye {
+            case .pill: return .pill
+            case .cup: return .cup
+            case .content: return .happy
+            }
+        }()
         for sd in [-1.0, 1.0] {
             var ec = eCtx
             ec.concatenate(CGAffineTransform(translationX: CGFloat(sd*sp+lx), y: CGFloat(ey+ly)))
-            drawEyeShape(ctx: &ec, shape: f.eye, w: CGFloat(ew), h: CGFloat(eh))
-        }
-    }
-
-    // MARK: - Eye shapes
-
-    private func drawEyeShape(ctx: inout GraphicsContext, shape: USEyeShape, w: CGFloat, h: CGFloat) {
-        let ink = Color(red:0.055,green:0.059,blue:0.071)
-        switch shape {
-        case .pill:
-            var p = Path()
-            p.addRoundedRect(in: CGRect(x:-w/2, y:-h/2, width:w, height:h),
-                             cornerSize: CGSize(width:w/2, height:w/2))
-            ctx.fill(p, with: .color(ink))
-
-        case .cup:
-            // Flat top + semicircle bottom (cup shape)
-            let hh = h * 0.55
-            var p = Path()
-            p.move(to: CGPoint(x:-w/2, y:-hh/2))
-            p.addLine(to: CGPoint(x: w/2, y:-hh/2))
-            p.addLine(to: CGPoint(x: w/2, y: hh/2-w/2))
-            p.addArc(center: CGPoint(x:0, y:hh/2-w/2), radius:w/2, startAngle:.degrees(0), endAngle:.degrees(180), clockwise:false)
-            p.closeSubpath()
-            ctx.fill(p, with: .color(ink))
-
-        case .content:
-            // Upward arc (content / happy)
-            var p = Path()
-            p.addArc(center: CGPoint(x:0, y:-h*0.12), radius:w*0.85,
-                     startAngle:.degrees(180*0.15), endAngle:.degrees(180*0.85), clockwise:false)
-            ctx.stroke(p, with: .color(ink),
-                       style: StrokeStyle(lineWidth:w*0.5, lineCap:.round))
+            ec.withCGContext { cg in
+                let frame = LexyFrame(
+                    rx: ew, ry: eh, morph: 0, eye: mappedEye, eyeOpen: 1,
+                    lookX: 0, lookY: 0, tint: 0, tintColor: nil,
+                    bodyColor: nil, blush: 0, showBowtie: false, handsAmount: 0
+                )
+                drawLexyEyeDotsOnly(cg: cg, frame: frame, rx: ew, ry: eh)
+            }
         }
     }
 
