@@ -59,9 +59,11 @@
 		C2E76680AEDDBB57FBA635DB /* VercelPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1AF9BBCA06C760B8BF4961 /* VercelPoller.swift */; };
 		C37B509DCDCFBA97B85C35FD /* UploadCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354A45A3A64A56B73D833556 /* UploadCanvasView.swift */; };
 		C98BF35B0403D2C3F2239AB5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC245872AC55AA412ECB0A36 /* SettingsView.swift */; };
+		D0272DD54F02120B80EA0DF9 /* DrawMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3979F8A99BEF25E4AA1B69 /* DrawMath.swift */; };
 		D0E525593FFF79487B20CBFE /* GithubPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908B50F048A505A563E8CCFE /* GithubPoller.swift */; };
 		D3C2064BB3EAD9C68A44A838 /* IslandWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748EAADD985B69637C06C12E /* IslandWindowController.swift */; };
 		D45326884C3BFFC32861F3CA /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A039221E982BC1A94B5BBADF /* AppLog.swift */; };
+		D7837040A3DEDAFDF7A9B791 /* DrawMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC3979F8A99BEF25E4AA1B69 /* DrawMath.swift */; };
 		E6167C2BDD117724928BB94E /* HookServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DDAA82F3F7FB545681324B /* HookServer.swift */; };
 		E96ABBC41C6137516932FF78 /* IslandScreenGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31BFA05E05A45B0CA4079BC /* IslandScreenGeometry.swift */; };
 		EABE8DE17065D7BDB5B15342 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = AC42619FECAE053E0E17EEB5 /* sounds */; };
@@ -108,6 +110,7 @@
 		DE6CA8BEAD1FAA1B8C544236 /* FileDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDropView.swift; sourceTree = "<group>"; };
 		EA5B8F7CC58EAA25D495450F /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
 		EBCDABF824457F04FE4EA786 /* BotCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotCanvasView.swift; sourceTree = "<group>"; };
+		EC3979F8A99BEF25E4AA1B69 /* DrawMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawMath.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -148,6 +151,7 @@
 				B82D1F74DAE31AEBBD6A6A02 /* BotEngine.swift */,
 				4761F654239F5E2CC0375F46 /* CalcomPoller.swift */,
 				EA5B8F7CC58EAA25D495450F /* ClaudeService.swift */,
+				EC3979F8A99BEF25E4AA1B69 /* DrawMath.swift */,
 				DE6CA8BEAD1FAA1B8C544236 /* FileDropView.swift */,
 				908B50F048A505A563E8CCFE /* GithubPoller.swift */,
 				DBD4F6579FD20610B45E7148 /* GreetingCanvasView.swift */,
@@ -292,6 +296,7 @@
 				42B0CCCC39FDCF9AA8049456 /* BotEngine.swift in Sources */,
 				8164ACD1746874F17AACD268 /* CalcomPoller.swift in Sources */,
 				87FC6F05506BE4618FA80E02 /* ClaudeService.swift in Sources */,
+				D0272DD54F02120B80EA0DF9 /* DrawMath.swift in Sources */,
 				657EE035FE6872FFFD7E27F1 /* FileDropView.swift in Sources */,
 				D0E525593FFF79487B20CBFE /* GithubPoller.swift in Sources */,
 				B4C10CCA97E4D98453FD76DB /* GreetingCanvasView.swift in Sources */,
@@ -329,6 +334,7 @@
 				06BAB9927E840E634ACB90EE /* BotEngine.swift in Sources */,
 				AFD5BA09E6E6A19C74818D21 /* CalcomPoller.swift in Sources */,
 				78BB76B91160BD31B2A063B6 /* ClaudeService.swift in Sources */,
+				D7837040A3DEDAFDF7A9B791 /* DrawMath.swift in Sources */,
 				78EECBBF38C205092C586D41 /* FileDropView.swift in Sources */,
 				FBEDE6E4258A53CF4335D2A2 /* GithubPoller.swift in Sources */,
 				FB6C2818B2A809C27A5C01C6 /* GreetingCanvasView.swift in Sources */,
