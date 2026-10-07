@@ -176,7 +176,7 @@ struct SettingsView: View {
                             #endif
                         }
                         #if APPSTORE
-                        Text("~/.claude/coucou/nb-hook")
+                        Text("~/.claude/heyllo/nb-hook")
                             .font(.system(size: 11, design: .monospaced))
                             .foregroundColor(.secondary)
                         HStack(spacing: 10) {
@@ -441,7 +441,7 @@ struct SettingsView: View {
 
                         Divider()
 
-                        Text("Choose the tools you use. Coucou only shows what you declare here.")
+                        Text("Choose the tools you use. Heyllo only shows what you declare here.")
                             .font(.system(size: 11))
                             .foregroundColor(.secondary)
 
@@ -590,8 +590,8 @@ struct SettingsView: View {
     private func installHooksAppStore() {
         guard let claudeURL = pickClaudeFolder(prompt: "Select") else { return }
         let alert = NSAlert()
-        alert.messageText = "Install Coucou hooks in ~/.claude?"
-        alert.informativeText = "Will write:\n• ~/.claude/coucou/nb-hook\n• ~/.claude/settings.json (backup created first)"
+        alert.messageText = "Install Heyllo hooks in ~/.claude?"
+        alert.informativeText = "Will write:\n• ~/.claude/heyllo/nb-hook\n• ~/.claude/settings.json (backup created first)"
         alert.addButton(withTitle: "Install")
         alert.addButton(withTitle: "Cancel")
         alert.alertStyle = .informational
@@ -654,7 +654,7 @@ struct SettingsView: View {
             pendingGeminiJSON = try HookServer.shared.previewGeminiHooks(install: install)
             showGeminiDiff = true
             statusMessage = "Review the JSON below before confirming."
-        } catch let e as NSError where e.domain == "CoucouNoop" {
+        } catch let e as NSError where e.domain == "HeylloNoop" {
             statusMessage = e.localizedDescription
         } catch {
             statusMessage = "❌ \(error.localizedDescription)"
@@ -681,7 +681,7 @@ struct SettingsView: View {
             pendingAgyJSON = try HookServer.shared.previewAgyHooks(install: install)
             showAgyDiff = true
             statusMessage = "Review the JSON below before confirming."
-        } catch let e as NSError where e.domain == "CoucouNoop" {
+        } catch let e as NSError where e.domain == "HeylloNoop" {
             statusMessage = e.localizedDescription
         } catch {
             statusMessage = "❌ \(error.localizedDescription)"
