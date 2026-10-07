@@ -782,20 +782,33 @@ final class BotEngine: ObservableObject {
         if tilt != 0 { ctx.rotate(by: .radians(tilt)) }
         ctx.scaleBy(x: sx, y: sy)
 
-        // Body path (superellipse for Mochi, morph to rect for upload)
-        let bodyPath = mochiPath(rx: rx, ry: ry, morph: morph, R: R)
+        // Body path — used below only to clip the mouth hole to Lexy's face silhouette.
+        let bodyPath = Path(lexyFacePath(rx: rx, ry: ry, morph: morph))
 
-        // Body fill
-        drawBody(ctx: &ctx, path: bodyPath, R: R, rx: rx, ry: ry)
+        // Resolve the active eye shape here (state-machine policy), then hand a pure
+        // snapshot to LexyGeometry — it never reads BotEngine's own properties directly.
+        let activeEye: EyeShape = {
+            if morph > 0.5 {
+                if isChewing { return .happy }
+                if slotHTarget > 0.05 || slotH > 0.10 { return .cup }
+            }
+            return eyeOverride ?? cfg.eye
+        }()
 
-        // Blush — always shows a floor proportional to tint (prototype behaviour)
-        let blushVal = max(blush, tint * 0.5) * (1 - morph)
-        if blushVal > 0.01 {
-            drawBlush(ctx: &ctx, path: bodyPath, rx: rx, ry: ry, R: R, blush: blushVal)
+        let frame = LexyFrame(
+            rx: rx, ry: ry, morph: morph,
+            eye: activeEye, eyeOpen: open,
+            lookX: cfg.look?.x ?? 0, lookY: cfg.look?.y ?? 0,
+            tint: tint, tintColor: cfg.color,
+            bodyColor: bodyColor,
+            blush: max(blush, tint * 0.5) * (1 - morph),
+            showBowtie: !isMini,
+            handsAmount: hands
+        )
+
+        ctx.withCGContext { cg in
+            drawLexyFace(cg: cg, frame: frame)
         }
-
-        // Eyes
-        drawEyes(ctx: &ctx, path: bodyPath, R: R, rx: rx, ry: ry)
 
         // Mouth hole — dark pill cutout inside the box face
         // Spec: left/right margins 0.10R, top margin 0.08R from box top (-0.94R)
@@ -910,36 +923,18 @@ final class BotEngine: ObservableObject {
             let worldX = cx + cosT * localX - sinT * localY
             let worldY = cy + sinT * localX + cosT * localY
 
-            // Draw
             var handCtx = context
             handCtx.translateBy(x: worldX, y: worldY)
             if handRot != 0 { handCtx.rotate(by: .radians(handRot)) }
-
-            let handRect = CGRect(x: -hew, y: -heh, width: hew * 2, height: heh * 2)
-            var handPath = Path()
-            handPath.addEllipse(in: handRect)
-
-            // Fill with body material (same gradient as body)
-            if let bc = bodyColor {
-                let c0 = mix3(cgColorToTuple(bc), (1, 1, 1), 0.35)
-                let c1 = cgColorToTuple(bc)
-                handCtx.fill(handPath, with: .linearGradient(
-                    Gradient(colors: [colorFromTuple(c0), colorFromTuple(c1)]),
-                    startPoint: CGPoint(x: hew * 0.7, y: -heh * 0.85),
-                    endPoint: CGPoint(x: -hew * 0.8, y: heh * 0.9)
-                ))
-            } else {
-                let c0 = cgColorToTuple(LexyConst.baseTop)
-                let c1 = cgColorToTuple(LexyConst.baseBottom)
-                handCtx.fill(handPath, with: .linearGradient(
-                    Gradient(colors: [colorFromTuple(c0), colorFromTuple(c1)]),
-                    startPoint: CGPoint(x: hew * 0.7, y: -heh * 0.85),
-                    endPoint: CGPoint(x: -hew * 0.8, y: heh * 0.9)
-                ))
+            let frame = LexyFrame(
+                rx: rx, ry: ry, morph: 0, eye: .pill, eyeOpen: 1,
+                lookX: 0, lookY: 0, tint: 0, tintColor: nil,
+                bodyColor: bodyColor, blush: 0, showBowtie: false,
+                handsAmount: hands
+            )
+            handCtx.withCGContext { cg in
+                drawLexyHands(cg: cg, frame: frame, rx: hew, ry: heh)
             }
-
-            // Subtle separation border — rgba(0,0,0,0.08) 1pt
-            handCtx.stroke(handPath, with: .color(Color.black.opacity(0.08)), lineWidth: 1)
         }
     }
 
@@ -962,281 +957,6 @@ final class BotEngine: ObservableObject {
     }
 
     // MARK: - Private draw helpers
-
-    private func mochiPath(rx: CGFloat, ry: CGFloat, morph: CGFloat, R: CGFloat) -> Path {
-        let n = 72
-        let expN: CGFloat = 2.0 / 2.7
-        // Target mailbox dims (spec: 1.0R wide, 0.94R tall, 0.42R corner radius)
-        let tw = R * 1.0
-        let th = R * 0.94
-        let tr = R * 0.42
-        var path = Path()
-        for i in 0...n {
-            let a = CGFloat(i) / CGFloat(n) * .pi * 2
-            let ca = cos(a), sa = sin(a)
-            let px0 = rx * (ca >= 0 ? pow(ca, expN) : -pow(-ca, expN))
-            let py0 = ry * (sa >= 0 ? pow(sa, expN) : -pow(-sa, expN))
-            let px: CGFloat
-            let py: CGFloat
-            if morph < 0.005 {
-                px = px0; py = py0
-            } else {
-                let rr = rrPoint(ca: ca, sa: sa, W: tw, H: th, cr: tr)
-                px = lerp(px0, rr.x, morph)
-                py = lerp(py0, rr.y, morph)
-            }
-            if i == 0 { path.move(to: CGPoint(x: px, y: py)) }
-            else { path.addLine(to: CGPoint(x: px, y: py)) }
-        }
-        path.closeSubpath()
-        return path
-    }
-
-    /// Ray-rounded-rect intersection: find the point on the rounded rect boundary in direction (ca, sa).
-    private func rrPoint(ca: CGFloat, sa: CGFloat, W: CGFloat, H: CGFloat, cr: CGFloat) -> CGPoint {
-        let eps: CGFloat = 1e-6
-        let kx: CGFloat = ca >= 0 ? 1 : -1
-        let ky: CGFloat = sa >= 0 ? 1 : -1
-        let cx = kx * (W - cr)
-        let cy = ky * (H - cr)
-
-        // Try corner arc
-        let dot  = ca * cx + sa * cy
-        let disc = dot * dot - (cx*cx + cy*cy - cr*cr)
-        if disc >= 0 {
-            let t = dot + sqrt(disc)
-            if t > eps {
-                let px = ca * t, py = sa * t
-                if abs(px) >= W - cr - eps && abs(py) >= H - cr - eps {
-                    return CGPoint(x: px, y: py)
-                }
-            }
-        }
-
-        // Horizontal edge |y| = H
-        if abs(sa) > eps {
-            let t = (ky * H) / sa
-            if t > eps {
-                let x = ca * t
-                if abs(x) <= W - cr + eps { return CGPoint(x: x, y: ky * H) }
-            }
-        }
-        // Vertical edge |x| = W
-        if abs(ca) > eps {
-            let t = (kx * W) / ca
-            if t > eps {
-                let y = sa * t
-                if abs(y) <= H - cr + eps { return CGPoint(x: kx * W, y: y) }
-            }
-        }
-
-        return CGPoint(x: kx * W, y: ky * H)
-    }
-
-    private func drawBody(ctx: inout GraphicsContext, path: Path, R: CGFloat, rx: CGFloat, ry: CGFloat) {
-        if let bc = bodyColor {
-            // Mini bots: flat solid fill — no gradient, no reflection, no highlight
-            ctx.fill(path, with: .color(Color(cgColor: bc)))
-        } else {
-            // Main bot: linear gradient body
-            let c0 = cgColorToTuple(LexyConst.baseTop)
-            let c1 = cgColorToTuple(LexyConst.baseBottom)
-            ctx.fill(path, with: .linearGradient(
-                Gradient(colors: [colorFromTuple(c0), colorFromTuple(c1)]),
-                startPoint: CGPoint(x: rx*0.7, y: -ry*0.85),
-                endPoint: CGPoint(x: -rx*0.8, y: ry*0.9)
-            ))
-            // State tint — fades out as morph increases (mailbox has no tint)
-            let effectiveTint = tint * (1 - morph)
-            if effectiveTint > 0.01 {
-                let tc = colorFromTuple(col)
-                ctx.fill(path, with: .linearGradient(
-                    Gradient(stops: [
-                        .init(color: tc.opacity(Double(0.72 * effectiveTint)), location: 0),
-                        .init(color: tc.opacity(0), location: 1)
-                    ]),
-                    startPoint: CGPoint(x: 0, y: ry),
-                    endPoint: CGPoint(x: 0, y: -ry)
-                ))
-            }
-            // Shadow rim
-            ctx.fill(path, with: .radialGradient(
-                Gradient(stops: [
-                    .init(color: .clear, location: 0),
-                    .init(color: .clear, location: 0.6),
-                    .init(color: Color.black.opacity(0.2), location: 1)
-                ]),
-                center: .zero, startRadius: R*0.15, endRadius: R*1.25
-            ))
-            // Highlight
-            ctx.fill(path, with: .radialGradient(
-                Gradient(stops: [
-                    .init(color: Color.white.opacity(0.55), location: 0),
-                    .init(color: .clear, location: 1)
-                ]),
-                center: CGPoint(x: rx*0.34, y: -ry*0.46),
-                startRadius: 0,
-                endRadius: R*0.42
-            ))
-        }
-    }
-
-    private func drawBlush(ctx: inout GraphicsContext, path: Path, rx: CGFloat, ry: CGFloat, R: CGFloat, blush: CGFloat) {
-        ctx.clip(to: path)
-        let yOffset = sin(yaw) * rx * 0.8
-        for sd in [-1.0, 1.0] {
-            let bx = CGFloat(sd) * rx * 0.55 + yOffset
-            let by = ry * 0.2
-            var ellipse = Path()
-            ellipse.addEllipse(in: CGRect(x: bx - R*0.17, y: by - R*0.1, width: R*0.34, height: R*0.2))
-            ctx.fill(ellipse, with: .color(Color(red: 1, green: 0.471, blue: 0.588, opacity: Double(0.5 * blush))))
-        }
-    }
-
-    private func drawEyes(ctx: inout GraphicsContext, path: Path, R: CGFloat, rx: CGFloat, ry: CGFloat) {
-        var shape = eyeOverride ?? cfg.eye
-        // In box mode: cup eyes when file over box (slotHTarget set), happy arcs while chewing
-        if morph > 0.5 {
-            if isChewing { shape = .happy }
-            else if slotHTarget > 0.05 || slotH > 0.10 { shape = .cup }
-        }
-        ctx.clip(to: path)
-
-        for sd in [-1.0, 1.0] {
-            let eyeYaw   = CGFloat(sd) * LexyConst.eyeSp + yaw
-            var eyePitch = LexyConst.eyeP + pitch + roll
-            // Wrap pitch for roll-through effect
-            eyePitch = ((eyePitch + .pi).truncatingRemainder(dividingBy: .pi*2) + .pi*2).truncatingRemainder(dividingBy: .pi*2) - .pi
-
-            let cp = cos(eyePitch)
-            guard cos(eyeYaw) * cp > 0.04 else { continue }  // behind head
-
-            let ex = sin(eyeYaw) * cp * rx
-            let ey = -sin(eyePitch) * ry + (morph > 0 ? ry * 0.14 * morph : 0)
-
-            let fx = lerp(max(0.18, cos(eyeYaw)), 1, morph * 0.7)
-            let fy = lerp(max(0.18, cp),          1, morph * 0.7)
-
-            let eyeMult: CGFloat = isMini ? 1.9 : 1.0
-            let ew = R * LexyConst.eyeW * es * eyeMult
-            let eh = R * LexyConst.eyeH * es * eyeMult
-
-            var eyeCtx = ctx
-            eyeCtx.translateBy(x: ex, y: ey)
-            eyeCtx.scaleBy(x: fx, y: fy)
-            drawEyeShape(ctx: &eyeCtx, shape: shape, w: ew, h: eh, open: open, sd: CGFloat(sd), R: R)
-        }
-    }
-
-    private func drawEyeShape(ctx: inout GraphicsContext, shape: EyeShape, w: CGFloat, h: CGFloat, open: CGFloat, sd: CGFloat, R: CGFloat) {
-        let ink = isMini ? Color(cgColor: LexyConst.miniInk) : Color(cgColor: LexyConst.ink)
-        let now = CGFloat(CACurrentMediaTime())
-
-        switch shape {
-        case .wide:
-            drawEyeShape(ctx: &ctx, shape: .pill, w: w*1.16, h: h*1.12, open: open, sd: sd, R: R)
-
-        case .pill:
-            let hh = max(h * open, w * 0.3)
-            var p = Path()
-            p.addRoundedRect(in: CGRect(x: -w/2, y: -hh/2, width: w, height: hh),
-                             cornerSize: CGSize(width: min(w/2, hh/2), height: min(w/2, hh/2)))
-            ctx.fill(p, with: .color(ink))
-
-        case .dot:
-            var p = Path()
-            p.addEllipse(in: CGRect(x: -w*0.45, y: -w*0.45, width: w*0.9, height: w*0.9))
-            ctx.fill(p, with: .color(ink))
-
-        case .line:
-            ctx.rotate(by: .radians(-sd * 0.2))
-            var p = Path()
-            p.addRoundedRect(in: CGRect(x: -w*0.78, y: -w*0.21, width: w*1.56, height: w*0.42),
-                             cornerSize: CGSize(width: w*0.21, height: w*0.21))
-            ctx.fill(p, with: .color(ink))
-
-        case .flat:
-            var p = Path()
-            p.addRoundedRect(in: CGRect(x: -w*0.72, y: -w*0.2, width: w*1.44, height: w*0.4),
-                             cornerSize: CGSize(width: w*0.2, height: w*0.2))
-            ctx.fill(p, with: .color(ink))
-
-        case .happy:
-            var p = Path()
-            p.addArc(center: CGPoint(x: 0, y: h*0.18), radius: w*0.82,
-                     startAngle: .degrees(180 + 12), endAngle: .degrees(180 - 12), clockwise: true)
-            ctx.stroke(p, with: .color(ink), style: StrokeStyle(lineWidth: w*0.5, lineCap: .round))
-
-        case .closed:
-            var p = Path()
-            p.addArc(center: CGPoint(x: 0, y: -h*0.08), radius: w*0.78,
-                     startAngle: .degrees(15), endAngle: .degrees(165), clockwise: false)
-            ctx.stroke(p, with: .color(ink), style: StrokeStyle(lineWidth: w*0.36, lineCap: .round))
-
-        case .spiral:
-            var p = Path()
-            var a: CGFloat = 0
-            while a < 4.4 * .pi {
-                let r  = w * 0.06 + a * w * 0.058
-                let aa = a + now * 9 * sd
-                let px = cos(aa) * r
-                let py = sin(aa) * r
-                if a == 0 { p.move(to: CGPoint(x: px, y: py)) }
-                else { p.addLine(to: CGPoint(x: px, y: py)) }
-                a += 0.2
-            }
-            ctx.stroke(p, with: .color(ink), style: StrokeStyle(lineWidth: w*0.22, lineCap: .round))
-
-        case .heart:
-            let heartPath = heartShape(size: w * 1.2)
-            ctx.fill(heartPath, with: .color(Color(hex: "#FF4D6D")))
-
-        case .star:
-            ctx.rotate(by: .radians(now * 1.5 * sd))
-            let starPath = starShape(outer: w * 1.05, inner: w * 0.46)
-            ctx.fill(starPath, with: .color(Color(hex: "#F7B32B")))
-
-        case .tired:
-            var p1 = Path()
-            p1.addRoundedRect(in: CGRect(x: -w/2, y: -h*0.02, width: w, height: h*0.38),
-                              cornerSize: CGSize(width: w/2, height: w/2))
-            ctx.fill(p1, with: .color(ink))
-            var p2 = Path()
-            p2.addRoundedRect(in: CGRect(x: -w*0.62, y: -h*0.1, width: w*1.24, height: w*0.22),
-                              cornerSize: CGSize(width: w*0.11, height: w*0.11))
-            ctx.fill(p2, with: .color(ink))
-
-        case .wink:
-            if sd < 0 {
-                let hh = max(h * open, w * 0.3)
-                var p = Path()
-                p.addRoundedRect(in: CGRect(x: -w/2, y: -hh/2, width: w, height: hh),
-                                 cornerSize: CGSize(width: min(w/2,hh/2), height: min(w/2,hh/2)))
-                ctx.fill(p, with: .color(ink))
-            } else {
-                var p = Path()
-                p.addArc(center: CGPoint(x: 0, y: h*0.18), radius: w*0.82,
-                         startAngle: .degrees(180+12), endAngle: .degrees(180-12), clockwise: true)
-                ctx.stroke(p, with: .color(ink), style: StrokeStyle(lineWidth: w*0.5, lineCap: .round))
-            }
-
-        case .cup:
-            // Flat top, rounded bottom corners (like a cup / U-shape)
-            let hh = max(h * open, w * 0.3)
-            let cr = min(w / 2, hh / 2)  // bottom corner radius
-            var p = Path()
-            p.move(to: CGPoint(x: -w/2, y: -hh/2))
-            p.addLine(to: CGPoint(x: w/2, y: -hh/2))
-            p.addLine(to: CGPoint(x: w/2, y: hh/2 - cr))
-            p.addQuadCurve(to: CGPoint(x: w/2 - cr, y: hh/2),
-                           control: CGPoint(x: w/2, y: hh/2))
-            p.addLine(to: CGPoint(x: -w/2 + cr, y: hh/2))
-            p.addQuadCurve(to: CGPoint(x: -w/2, y: hh/2 - cr),
-                           control: CGPoint(x: -w/2, y: hh/2))
-            p.closeSubpath()
-            ctx.fill(p, with: .color(ink))
-        }
-    }
 
     private func drawBadge(context: GraphicsContext, size: CGSize, badge: BadgeType, R: CGFloat, rx: CGFloat, ry: CGFloat, cx: CGFloat, cy: CGFloat) {
         let bs = badgeS * (isMini ? 1.25 : 1)
