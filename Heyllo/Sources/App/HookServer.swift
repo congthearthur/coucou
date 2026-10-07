@@ -13,12 +13,12 @@ final class HookServer: @unchecked Sendable {
     // Support directory paths
     static var supportDir: URL {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("NotchBuddy")
+            .appendingPathComponent("Heyllo")
     }
     static var socketPath: String {
         #if APPSTORE
         // Container home root keeps path ≤ 103 bytes (sun_path limit on macOS is 104 incl. NUL)
-        // /Users/louis/Library/Containers/fr.louisraille.Coucou/Data/nb.sock = 66 bytes ✓
+        // ~/Library/Containers/app.heyllo-appstore/Data/nb.sock = 53 bytes ✓
         return NSHomeDirectory() + "/nb.sock"
         #else
         return supportDir.appendingPathComponent("nb.sock").path
@@ -154,7 +154,7 @@ final class HookServer: @unchecked Sendable {
 
     // MARK: - Event → AppState
     // Claude Code events route to the permanent "integration_claude" task.
-    // Events tagged with a valid coucou_agent route to a dynamic "integration_<agent>" task.
+    // Events tagged with a valid heyllo_agent route to a dynamic "integration_<agent>" task.
     // View switches only happen if VS Code (or the agent pill) is currently focused.
     // When not focused: state updates animate the mini bot in the pill; badge shown for alerts.
 
@@ -167,9 +167,9 @@ final class HookServer: @unchecked Sendable {
         let projectName = aliasProjectName(rawName.isEmpty ? "Session" : rawName)
 
         // Determine which pill this event belongs to.
-        // coucou_agent must be lowercase, digits and hyphens, ≤ 24 chars.
+        // heyllo_agent must be lowercase, digits and hyphens, ≤ 24 chars.
         // Absent or invalid → Claude Code pill (integration_claude); no change in behaviour.
-        let rawAgent = payload["coucou_agent"] as? String ?? ""
+        let rawAgent = payload["heyllo_agent"] as? String ?? ""
         let validAgent = Self.validateAgent(rawAgent)
         let agentId = validAgent.map { "agent_\($0)" } ?? "integration_claude"
         let isExternalAgent = validAgent != nil
@@ -283,7 +283,7 @@ final class HookServer: @unchecked Sendable {
 
     // MARK: - Agent validation + dynamic pill
 
-    /// Validates a coucou_agent name: lowercase, digits and hyphens, 1–24 chars.
+    /// Validates a heyllo_agent name: lowercase, digits and hyphens, 1–24 chars.
     /// "claude" is reserved and rejected so it cannot impersonate the Claude Code pill.
     /// Returns the name unchanged if valid, nil otherwise.
     private static func validateAgent(_ raw: String) -> String? {
@@ -349,11 +349,11 @@ final class HookServer: @unchecked Sendable {
         let rawName   = URL(fileURLWithPath: cwd).lastPathComponent
         let projectName = aliasProjectName(rawName.isEmpty ? "Session" : rawName)
 
-        // External agents (coucou_agent) do not yet get an approval card — answering
+        // External agents (heyllo_agent) do not yet get an approval card — answering
         // would show a card that looks like a Claude Code request. Reply immediately
         // with no decision so the relay writes nothing and the agent re-asks in its
         // terminal. Approval support for other agents will come with Codex support.
-        let rawAgent = payload["coucou_agent"] as? String ?? ""
+        let rawAgent = payload["heyllo_agent"] as? String ?? ""
         if Self.validateAgent(rawAgent) != nil {
             Task.detached { [weak self] in
                 self?.sendLine(fd: fd, text: #"{"permissionDecision":"ask"}"#)
@@ -568,7 +568,7 @@ final class HookServer: @unchecked Sendable {
 
     // MARK: - Outdated hook detection
 
-    /// Returns true if settings.json has a Coucou PermissionRequest hook with timeout < 120s.
+    /// Returns true if settings.json has a Heyllo PermissionRequest hook with timeout < 120s.
     static func hooksNeedUpdate() -> Bool {
         let settingsURL = FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent(".claude/settings.json")
@@ -582,7 +582,7 @@ final class HookServer: @unchecked Sendable {
             if let hookList = matcher["hooks"] as? [[String: Any]] {
                 for hook in hookList {
                     if let cmd = hook["command"] as? String,
-                       (cmd.contains("NotchBuddy") || cmd.contains("coucou")),
+                       cmd.contains("nb-hook"),
                        let timeout = hook["timeout"] as? Int,
                        timeout < 120 {
                         return true
@@ -649,7 +649,7 @@ final class HookServer: @unchecked Sendable {
         var hooks = settings["hooks"] as? [String: Any] ?? [:]
         for (event, timeout) in events {
             var existing = hooks[event] as? [[String: Any]] ?? []
-            existing.removeAll { ($0["hooks"] as? [[String: Any]])?.contains { ($0["command"] as? String)?.contains("NotchBuddy") == true || ($0["command"] as? String)?.contains("coucou") == true } ?? false }
+            existing.removeAll { ($0["hooks"] as? [[String: Any]])?.contains { ($0["command"] as? String)?.contains("nb-hook") == true } ?? false }
             existing.append(["hooks": [["type": "command", "command": quotedCmd, "timeout": timeout]]])
             hooks[event] = existing
         }
@@ -668,8 +668,7 @@ final class HookServer: @unchecked Sendable {
             if var matchers = hooks[key] as? [[String: Any]] {
                 matchers.removeAll { matcher in
                     (matcher["hooks"] as? [[String: Any]])?.contains {
-                        ($0["command"] as? String)?.contains("NotchBuddy") == true ||
-                        ($0["command"] as? String)?.contains("coucou") == true
+                        ($0["command"] as? String)?.contains("nb-hook") == true
                     } ?? false
                 }
                 if matchers.isEmpty { hooks.removeValue(forKey: key) }
@@ -689,13 +688,13 @@ final class HookServer: @unchecked Sendable {
     func installAndWriteClaudeHooksAppStore(claudeURL: URL) throws {
         let data = try buildHooksData(claudeURL: claudeURL)
 
-        // Write nb-hook (shell wrapper) + nb-hook.py (Python relay) into ~/.claude/coucou/
-        let coucouDir = claudeURL.appendingPathComponent("coucou")
-        try FileManager.default.createDirectory(at: coucouDir, withIntermediateDirectories: true)
-        let wrapperURL = coucouDir.appendingPathComponent("nb-hook")
+        // Write nb-hook (shell wrapper) + nb-hook.py (Python relay) into ~/.claude/heyllo/
+        let heylloDir = claudeURL.appendingPathComponent("heyllo")
+        try FileManager.default.createDirectory(at: heylloDir, withIntermediateDirectories: true)
+        let wrapperURL = heylloDir.appendingPathComponent("nb-hook")
         try nbHookShellWrapper.write(to: wrapperURL, atomically: true, encoding: .utf8)
         _ = try? FileManager.default.setAttributes([.posixPermissions: 0o755 as NSNumber], ofItemAtPath: wrapperURL.path)
-        let pyURL = coucouDir.appendingPathComponent("nb-hook.py")
+        let pyURL = heylloDir.appendingPathComponent("nb-hook.py")
         try nbHookPythonAppStore.write(to: pyURL, atomically: true, encoding: .utf8)
         _ = try? FileManager.default.setAttributes([.posixPermissions: 0o755 as NSNumber], ofItemAtPath: pyURL.path)
 
@@ -706,7 +705,7 @@ final class HookServer: @unchecked Sendable {
         let backupURL = claudeURL.appendingPathComponent("settings.json.bak-\(formatter.string(from: Date()))")
         try? FileManager.default.copyItem(at: settingsURL, to: backupURL)
         try data.write(to: settingsURL, options: .atomic)
-        UserDefaults.standard.set(true, forKey: "coucouHooksInstalled")
+        UserDefaults.standard.set(true, forKey: "heylloHooksInstalled")
     }
 
     func uninstallClaudeHooksAppStore(claudeURL: URL) throws {
@@ -718,8 +717,7 @@ final class HookServer: @unchecked Sendable {
             if var matchers = hooks[key] as? [[String: Any]] {
                 matchers.removeAll { matcher in
                     (matcher["hooks"] as? [[String: Any]])?.contains {
-                        ($0["command"] as? String)?.contains("coucou") == true ||
-                        ($0["command"] as? String)?.contains("NotchBuddy") == true
+                        ($0["command"] as? String)?.contains("nb-hook") == true
                     } ?? false
                 }
                 if matchers.isEmpty { hooks.removeValue(forKey: key) }
@@ -729,7 +727,7 @@ final class HookServer: @unchecked Sendable {
         settings["hooks"] = hooks
         let newData = try JSONSerialization.data(withJSONObject: settings, options: [.prettyPrinted, .sortedKeys])
         try newData.write(to: settingsURL, options: .atomic)
-        UserDefaults.standard.set(false, forKey: "coucouHooksInstalled")
+        UserDefaults.standard.set(false, forKey: "heylloHooksInstalled")
     }
 
     private func buildHooksData(claudeURL: URL) throws -> Data {
@@ -740,7 +738,7 @@ final class HookServer: @unchecked Sendable {
             settings = parsed
         }
         // Derive hook path from the panel-selected claudeURL (real ~/.claude, not container)
-        let hookPath = claudeURL.appendingPathComponent("coucou/nb-hook").path
+        let hookPath = claudeURL.appendingPathComponent("heyllo/nb-hook").path
         let quotedCmd = "/bin/sh \"\(hookPath.replacingOccurrences(of: "\"", with: "\\\""))\""
         let events: [(String, Int)] = [
             ("SessionStart", 10), ("SessionEnd", 10),
@@ -755,8 +753,7 @@ final class HookServer: @unchecked Sendable {
         for (event, timeout) in events {
             var existing = hooks[event] as? [[String: Any]] ?? []
             existing.removeAll { ($0["hooks"] as? [[String: Any]])?.contains {
-                ($0["command"] as? String)?.contains("coucou") == true ||
-                ($0["command"] as? String)?.contains("NotchBuddy") == true
+                ($0["command"] as? String)?.contains("nb-hook") == true
             } ?? false }
             existing.append(["hooks": [["type": "command", "command": quotedCmd, "timeout": timeout]]])
             hooks[event] = existing
@@ -802,8 +799,8 @@ final class HookServer: @unchecked Sendable {
     static func agyHooksInstalled() -> Bool {
         guard let data = try? Data(contentsOf: agyHooksURL),
               let root = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
-              let coucou = root["coucou"] else { return false }
-        let json = (try? JSONSerialization.data(withJSONObject: coucou))
+              let heyllo = root["heyllo"] else { return false }
+        let json = (try? JSONSerialization.data(withJSONObject: heyllo))
             .flatMap { String(data: $0, encoding: .utf8) } ?? ""
         return json.contains("nb-hook")
     }
@@ -817,7 +814,7 @@ final class HookServer: @unchecked Sendable {
         let url = Self.geminiSettingsURL
         let exists = FileManager.default.fileExists(atPath: url.path)
         if !install && !exists {
-            throw NSError(domain: "CoucouNoop", code: 0, userInfo: [
+            throw NSError(domain: "HeylloNoop", code: 0, userInfo: [
                 NSLocalizedDescriptionKey: "No Gemini CLI hooks to remove."
             ])
         }
@@ -833,7 +830,7 @@ final class HookServer: @unchecked Sendable {
         let url = Self.geminiSettingsURL
         let current = (try? Data(contentsOf: url)) ?? Data()
         guard sha256Hex(current) == fp else {
-            throw NSError(domain: "Coucou", code: 1, userInfo: [
+            throw NSError(domain: "Heyllo", code: 1, userInfo: [
                 NSLocalizedDescriptionKey: "~/.gemini/settings.json changed since preview. Refresh and try again."
             ])
         }
@@ -846,8 +843,8 @@ final class HookServer: @unchecked Sendable {
         var settings = try Self.strictReadJSONObject(at: Self.geminiSettingsURL,
                                                      label: "~/.gemini/settings.json")
         if let raw = settings["hooks"], !(raw is [String: Any]) {
-            throw NSError(domain: "Coucou", code: 2, userInfo: [
-                NSLocalizedDescriptionKey: "~/.gemini/settings.json: \"hooks\" has an unexpected type — Coucou has not touched it."
+            throw NSError(domain: "Heyllo", code: 2, userInfo: [
+                NSLocalizedDescriptionKey: "~/.gemini/settings.json: \"hooks\" has an unexpected type — Heyllo has not touched it."
             ])
         }
         let base = hookBase()
@@ -863,8 +860,8 @@ final class HookServer: @unchecked Sendable {
         var hooks = settings["hooks"] as? [String: Any] ?? [:]
         for (geminiEvent, normalizedEvent, timeout) in events {
             if let raw = hooks[geminiEvent], !(raw is [[String: Any]]) {
-                throw NSError(domain: "Coucou", code: 2, userInfo: [
-                    NSLocalizedDescriptionKey: "~/.gemini/settings.json: \"hooks\"[\"\(geminiEvent)\"] has an unexpected type — Coucou has not touched it."
+                throw NSError(domain: "Heyllo", code: 2, userInfo: [
+                    NSLocalizedDescriptionKey: "~/.gemini/settings.json: \"hooks\"[\"\(geminiEvent)\"] has an unexpected type — Heyllo has not touched it."
                 ])
             }
             var groups = hooks[geminiEvent] as? [[String: Any]] ?? []
@@ -887,8 +884,8 @@ final class HookServer: @unchecked Sendable {
         var settings = try Self.strictReadJSONObject(at: Self.geminiSettingsURL,
                                                      label: "~/.gemini/settings.json")
         if let raw = settings["hooks"], !(raw is [String: Any]) {
-            throw NSError(domain: "Coucou", code: 2, userInfo: [
-                NSLocalizedDescriptionKey: "~/.gemini/settings.json: \"hooks\" has an unexpected type — Coucou has not touched it."
+            throw NSError(domain: "Heyllo", code: 2, userInfo: [
+                NSLocalizedDescriptionKey: "~/.gemini/settings.json: \"hooks\" has an unexpected type — Heyllo has not touched it."
             ])
         }
         if var hooks = settings["hooks"] as? [String: Any] {
@@ -913,7 +910,7 @@ final class HookServer: @unchecked Sendable {
         let url = Self.agyHooksURL
         let exists = FileManager.default.fileExists(atPath: url.path)
         if !install && !exists {
-            throw NSError(domain: "CoucouNoop", code: 0, userInfo: [
+            throw NSError(domain: "HeylloNoop", code: 0, userInfo: [
                 NSLocalizedDescriptionKey: "No Antigravity hooks to remove."
             ])
         }
@@ -929,7 +926,7 @@ final class HookServer: @unchecked Sendable {
         let url = Self.agyHooksURL
         let current = (try? Data(contentsOf: url)) ?? Data()
         guard sha256Hex(current) == fp else {
-            throw NSError(domain: "Coucou", code: 1, userInfo: [
+            throw NSError(domain: "Heyllo", code: 1, userInfo: [
                 NSLocalizedDescriptionKey: "~/.gemini/config/hooks.json changed since preview. Refresh and try again."
             ])
         }
@@ -944,20 +941,20 @@ final class HookServer: @unchecked Sendable {
         let base = hookBase()
         // PreToolUse / PostToolUse: tool-level hooks — use matcher group
         // PreInvocation / PostInvocation / Stop: lifecycle hooks — direct handler, no matcher
-        var coucou: [String: Any] = [:]
+        var heyllo: [String: Any] = [:]
         for event in ["PreToolUse", "PostToolUse"] {
             let hook: [String: Any] = ["type": "command",
                                        "command": "\(base) --agent antigravity \(event)",
                                        "timeout": 10]
-            coucou[event] = [["matcher": "*", "hooks": [hook]]]
+            heyllo[event] = [["matcher": "*", "hooks": [hook]]]
         }
         for event in ["PreInvocation", "PostInvocation", "Stop"] {
             let hook: [String: Any] = ["type": "command",
                                        "command": "\(base) --agent antigravity \(event)",
                                        "timeout": 10]
-            coucou[event] = [hook]
+            heyllo[event] = [hook]
         }
-        root["coucou"] = coucou
+        root["heyllo"] = heyllo
         return try JSONSerialization.data(withJSONObject: root,
                                          options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
     }
@@ -966,6 +963,7 @@ final class HookServer: @unchecked Sendable {
         var root = try Self.strictReadJSONObject(at: Self.agyHooksURL,
                                                  label: "~/.gemini/config/hooks.json")
         root.removeValue(forKey: "coucou")
+        root.removeValue(forKey: "heyllo")
         return try JSONSerialization.data(withJSONObject: root,
                                          options: [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes])
     }
@@ -985,13 +983,13 @@ final class HookServer: @unchecked Sendable {
         let data: Data
         do { data = try Data(contentsOf: url) }
         catch {
-            throw NSError(domain: "Coucou", code: 2, userInfo: [
-                NSLocalizedDescriptionKey: "\(label) cannot be read — Coucou has not touched it."
+            throw NSError(domain: "Heyllo", code: 2, userInfo: [
+                NSLocalizedDescriptionKey: "\(label) cannot be read — Heyllo has not touched it."
             ])
         }
         guard let obj = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else {
-            throw NSError(domain: "Coucou", code: 2, userInfo: [
-                NSLocalizedDescriptionKey: "\(label) is not valid JSON — Coucou has not touched it."
+            throw NSError(domain: "Heyllo", code: 2, userInfo: [
+                NSLocalizedDescriptionKey: "\(label) is not valid JSON — Heyllo has not touched it."
             ])
         }
         return obj
@@ -1008,7 +1006,7 @@ final class HookServer: @unchecked Sendable {
                 .appendingPathComponent("\(suffix).bak-\(fmt.string(from: Date()))")
             do { try fm.copyItem(at: url, to: backupURL) }
             catch {
-                throw NSError(domain: "Coucou", code: 3, userInfo: [
+                throw NSError(domain: "Heyllo", code: 3, userInfo: [
                     NSLocalizedDescriptionKey: "Could not back up \(url.lastPathComponent): \(error.localizedDescription)"
                 ])
             }
@@ -1047,7 +1045,7 @@ final class HookServer: @unchecked Sendable {
 // MARK: - Notification names for hook server → controller communication
 
 extension Notification.Name {
-    static let hookExpand = Notification.Name("notchBuddy.hookExpand")
+    static let hookExpand = Notification.Name("heyllo.hookExpand")
 }
 
 // MARK: - nb-hook shell wrapper (same for both GitHub and App Store)
@@ -1058,7 +1056,7 @@ extension Notification.Name {
 
 private let nbHookShellWrapper = """
 #!/bin/sh
-# Coucou hook relay — always exits 0, never blocks Claude Code
+# Heyllo hook relay — always exits 0, never blocks Claude Code
 HOOK_DIR="$(dirname "$0")"
 if xcode-select -p >/dev/null 2>&1; then
     out=$(/usr/bin/python3 "$HOOK_DIR/nb-hook.py" "$@" 2>/dev/null)
@@ -1074,8 +1072,8 @@ exit 0
 
 private let nbHookPythonGitHub = """
 #!/usr/bin/env python3
-# nb-hook.py — Coucou hook relay for Claude Code and third-party agents (GitHub version)
-# Reads JSON from stdin, forwards to Coucou via Unix socket, translates response.
+# nb-hook.py — Heyllo hook relay for Claude Code and third-party agents (GitHub version)
+# Reads JSON from stdin, forwards to Heyllo via Unix socket, translates response.
 import sys, json, os, socket
 
 def normalize_event(name):
@@ -1124,7 +1122,7 @@ def main():
         return
 
     # Parse --agent <name> and optional positional event from argv.
-    # --agent tags the payload with coucou_agent so the app routes to the right pill.
+    # --agent tags the payload with heyllo_agent so the app routes to the right pill.
     # The positional arg is a fallback event name for agents that do not set hook_event_name.
     args = sys.argv[1:]
     agent = ''
@@ -1139,7 +1137,7 @@ def main():
                 arg_event = args[i]
             i += 1
     if agent:
-        payload.setdefault('coucou_agent', agent)
+        payload.setdefault('heyllo_agent', agent)
 
     # Enrich with terminal context
     env = os.environ
@@ -1165,11 +1163,11 @@ def main():
 
     event = payload.get('hook_event_name', '')
     socket_path = os.path.expanduser(
-        '~/Library/Application Support/NotchBuddy/nb.sock'
+        '~/Library/Application Support/Heyllo/nb.sock'
     )
 
     if event == 'PermissionRequest':
-        # Block and wait for Coucou's decision (Claude Code allows up to 120s)
+        # Block and wait for Heyllo's decision (Claude Code allows up to 120s)
         try:
             s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
             s.settimeout(118)
@@ -1204,7 +1202,7 @@ def main():
                     sys.stdout.flush()
                     sys.exit(0)
                 elif decision == 'deny':
-                    out = {'hookSpecificOutput': {'hookEventName': 'PermissionRequest', 'decision': {'behavior': 'deny', 'message': 'Denied from Coucou'}}}
+                    out = {'hookSpecificOutput': {'hookEventName': 'PermissionRequest', 'decision': {'behavior': 'deny', 'message': 'Denied from Heyllo'}}}
                     sys.stdout.write(json.dumps(out) + '\\n')
                     sys.stdout.flush()
                     sys.exit(0)
@@ -1238,7 +1236,7 @@ sys.exit(0)
 
 private let nbHookPythonAppStore = """
 #!/usr/bin/env python3
-# nb-hook.py — Coucou (App Store) hook relay for Claude Code and third-party agents
+# nb-hook.py — Heyllo (App Store) hook relay for Claude Code and third-party agents
 # Socket lives inside the sandboxed container; script runs outside the sandbox.
 import sys, json, os, socket
 
@@ -1288,7 +1286,7 @@ def main():
         return
 
     # Parse --agent <name> and optional positional event from argv.
-    # --agent tags the payload with coucou_agent so the app routes to the right pill.
+    # --agent tags the payload with heyllo_agent so the app routes to the right pill.
     # The positional arg is a fallback event name for agents that do not set hook_event_name.
     args = sys.argv[1:]
     agent = ''
@@ -1303,7 +1301,7 @@ def main():
                 arg_event = args[i]
             i += 1
     if agent:
-        payload.setdefault('coucou_agent', agent)
+        payload.setdefault('heyllo_agent', agent)
 
     env = os.environ
     payload.setdefault('term_program', env.get('TERM_PROGRAM', ''))
@@ -1328,11 +1326,11 @@ def main():
 
     event = payload.get('hook_event_name', '')
     socket_path = os.path.expanduser(
-        '~/Library/Containers/fr.louisraille.Coucou/Data/nb.sock'
+        '~/Library/Containers/app.heyllo-appstore/Data/nb.sock'
     )
 
     if event == 'PermissionRequest':
-        # Block and wait for Coucou's decision (Claude Code allows up to 120s)
+        # Block and wait for Heyllo's decision (Claude Code allows up to 120s)
         try:
             s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
             s.settimeout(118)
@@ -1367,7 +1365,7 @@ def main():
                     sys.stdout.flush()
                     sys.exit(0)
                 elif decision == 'deny':
-                    out = {'hookSpecificOutput': {'hookEventName': 'PermissionRequest', 'decision': {'behavior': 'deny', 'message': 'Denied from Coucou'}}}
+                    out = {'hookSpecificOutput': {'hookEventName': 'PermissionRequest', 'decision': {'behavior': 'deny', 'message': 'Denied from Heyllo'}}}
                     sys.stdout.write(json.dumps(out) + '\\n')
                     sys.stdout.flush()
                     sys.exit(0)
