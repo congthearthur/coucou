@@ -1,6 +1,6 @@
-name: NotchBuddy
+name: Heyllo
 options:
-  bundleIdPrefix: fr.louisraille
+  bundleIdPrefix: app.heyllo
   deploymentTarget:
     macOS: "15.0"
   xcodeVersion: "27.0"
@@ -20,31 +20,30 @@ settings:
       CODE_SIGNING_REQUIRED: YES
       CODE_SIGNING_ALLOWED: YES
       CODE_SIGN_IDENTITY: "Developer ID Application"
-      DEVELOPMENT_TEAM: 256AUJ9555
       OTHER_CODE_SIGN_FLAGS: "--timestamp"
       CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
-      CODE_SIGN_ENTITLEMENTS: Resources/Coucou.entitlements
+      CODE_SIGN_ENTITLEMENTS: Resources/Heyllo.entitlements
 
 schemes:
-  NotchBuddy:
+  Heyllo:
     build:
       targets:
-        NotchBuddy: all
+        Heyllo: all
     run:
       config: Debug
     archive:
       config: Release
-  CoucouAppStore:
+  HeylloAppStore:
     build:
       targets:
-        CoucouAppStore: all
+        HeylloAppStore: all
     run:
       config: Debug
     archive:
       config: Release
 
 targets:
-  NotchBuddy:
+  Heyllo:
     type: application
     platform: macOS
     sources:
@@ -58,9 +57,9 @@ targets:
     info:
       path: Resources/Info.plist
       properties:
-        CFBundleName: Coucou
-        CFBundleDisplayName: Coucou
-        CFBundleIdentifier: fr.louisraille.NotchBuddy
+        CFBundleName: Heyllo
+        CFBundleDisplayName: Heyllo
+        CFBundleIdentifier: app.heyllo
         CFBundleVersion: "2"
         CFBundleShortVersionString: "0.1.1"
         CFBundlePackageType: APPL
@@ -71,14 +70,14 @@ targets:
         NSAccessibilityUsageDescription: "Pour lire le titre de la fenêtre active et l'attacher comme contexte."
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: fr.louisraille.NotchBuddy
-        PRODUCT_NAME: Coucou
+        PRODUCT_BUNDLE_IDENTIFIER: app.heyllo
+        PRODUCT_NAME: Heyllo
         INFOPLIST_FILE: Resources/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         MACOSX_DEPLOYMENT_TARGET: "15.0"
         ENABLE_SANDBOX: NO
 
-  CoucouAppStore:
+  HeylloAppStore:
     type: application
     platform: macOS
     sources:
@@ -92,9 +91,9 @@ targets:
     info:
       path: Resources/InfoAppStore.plist
       properties:
-        CFBundleName: Coucou
-        CFBundleDisplayName: Coucou
-        CFBundleIdentifier: fr.louisraille.Coucou
+        CFBundleName: Heyllo
+        CFBundleDisplayName: Heyllo
+        CFBundleIdentifier: app.heyllo-appstore
         CFBundleVersion: "4"
         CFBundleShortVersionString: "1.0"
         CFBundlePackageType: APPL
@@ -105,14 +104,13 @@ targets:
         ITSAppUsesNonExemptEncryption: NO
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: fr.louisraille.Coucou
-        PRODUCT_NAME: Coucou
+        PRODUCT_BUNDLE_IDENTIFIER: app.heyllo-appstore
+        PRODUCT_NAME: Heyllo
         INFOPLIST_FILE: Resources/InfoAppStore.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         MACOSX_DEPLOYMENT_TARGET: "15.0"
         CODE_SIGN_STYLE: Automatic
         CODE_SIGN_IDENTITY: "Apple Development"
-        CODE_SIGN_ENTITLEMENTS: Resources/CoucouAppStore.entitlements
-        DEVELOPMENT_TEAM: 256AUJ9555
+        CODE_SIGN_ENTITLEMENTS: Resources/HeylloAppStore.entitlements
         SWIFT_ACTIVE_COMPILATION_CONDITIONS: APPSTORE
         CODE_SIGNING_ALLOWED: YES

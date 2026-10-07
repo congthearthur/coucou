@@ -1,0 +1,607 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0428A977CDC31762FF00B79E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8CB5432B2DC2142F58C099 /* AppDelegate.swift */; };
+		06BAB9927E840E634ACB90EE /* BotEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82D1F74DAE31AEBBD6A6A02 /* BotEngine.swift */; };
+		09D3D0AEDC9E063650003643 /* IslandStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C99D661C332A40744DD5F /* IslandStateMachine.swift */; };
+		0F4B58B6C7CB657D5EEFBD10 /* WindowContextCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D72628CD9BB85BF16A5FEE /* WindowContextCapture.swift */; };
+		12078EE426C5CCD59C52FC28 /* SoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BD51FA34B3C1A722C7F25D /* SoundEngine.swift */; };
+		1C0CCB4CC587265311B92FC2 /* SafeWebURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C74B35163A2A0D0F51415B /* SafeWebURL.swift */; };
+		20240532C3D5437DC427CBF8 /* SoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BD51FA34B3C1A722C7F25D /* SoundEngine.swift */; };
+		255F3FDD73A2987848A1A173 /* IslandScreenGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31BFA05E05A45B0CA4079BC /* IslandScreenGeometry.swift */; };
+		25885B633AAEFFCDF2EDC6D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB8CB5432B2DC2142F58C099 /* AppDelegate.swift */; };
+		28DFBB24539739A9B51BFA88 /* NotionPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD5809B6F06DDE569B5C858 /* NotionPoller.swift */; };
+		2D920F1C939BFC20411AFF34 /* StripePoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886A4655E48596E9775FEF51 /* StripePoller.swift */; };
+		2ECE5EAEA98DAEC324DEA3B5 /* IslandTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9843D0F41943AEA754DD5CDE /* IslandTypes.swift */; };
+		303C70858019BAC3AC4CC3A8 /* N8nPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B7BCC569F7BDD191851CAD /* N8nPoller.swift */; };
+		3197B89CCD203E87F084AD40 /* BotCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCDABF824457F04FE4EA786 /* BotCanvasView.swift */; };
+		350D39F0316A773F7C70A4BC /* NotchBuddyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C271D9B599FC670B3574794 /* NotchBuddyApp.swift */; };
+		3BC34209CB2AC2B01B1E698F /* IslandWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748EAADD985B69637C06C12E /* IslandWindowController.swift */; };
+		3DFBE8A50559DD3A5B491ACC /* ResendPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6800D9F85B49B05DEB7104F2 /* ResendPoller.swift */; };
+		4262A8498F82C85C51E29152 /* N8nPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B7BCC569F7BDD191851CAD /* N8nPoller.swift */; };
+		42B0CCCC39FDCF9AA8049456 /* BotEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B82D1F74DAE31AEBBD6A6A02 /* BotEngine.swift */; };
+		47C66F91EB52D2D1043D5123 /* IslandTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9843D0F41943AEA754DD5CDE /* IslandTypes.swift */; };
+		4A4E3F23CAEF75A16AA81393 /* VercelPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1AF9BBCA06C760B8BF4961 /* VercelPoller.swift */; };
+		4CEA81C2F1BFE48CDE6706CD /* IslandRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D2613174EA243AC450C080 /* IslandRootView.swift */; };
+		55483F330BE76742ACC6CE0A /* PillCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E28B60FC91B7CB45DCB1E8 /* PillCatalog.swift */; };
+		594B54C36C2A380BE3A3ABB3 /* WindowContextCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70D72628CD9BB85BF16A5FEE /* WindowContextCapture.swift */; };
+		5AF5021E1BB90017D25E1047 /* StripePoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 886A4655E48596E9775FEF51 /* StripePoller.swift */; };
+		5E38D4C5F79E10666DB83344 /* HookServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DDAA82F3F7FB545681324B /* HookServer.swift */; };
+		61047BD953AC22EAE4E4A4BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF7C918AF7882BD992ED920E /* Assets.xcassets */; };
+		657EE035FE6872FFFD7E27F1 /* FileDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6CA8BEAD1FAA1B8C544236 /* FileDropView.swift */; };
+		67974867A711FC7A5DB47234 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF7C918AF7882BD992ED920E /* Assets.xcassets */; };
+		78B11F33EAAFCB7E9EAAA433 /* UploadSequenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1679AF902D714AE7A65DB024 /* UploadSequenceEngine.swift */; };
+		78BB76B91160BD31B2A063B6 /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5B8F7CC58EAA25D495450F /* ClaudeService.swift */; };
+		78EECBBF38C205092C586D41 /* FileDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6CA8BEAD1FAA1B8C544236 /* FileDropView.swift */; };
+		8164ACD1746874F17AACD268 /* CalcomPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4761F654239F5E2CC0375F46 /* CalcomPoller.swift */; };
+		87FC6F05506BE4618FA80E02 /* ClaudeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA5B8F7CC58EAA25D495450F /* ClaudeService.swift */; };
+		8C83A3F6E5181B870457CCF8 /* IslandRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D2613174EA243AC450C080 /* IslandRootView.swift */; };
+		8FDB2BE1175D72ECB4F45707 /* UploadSequenceEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1679AF902D714AE7A65DB024 /* UploadSequenceEngine.swift */; };
+		90023BF1F2EBE7103DF57E28 /* IslandStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F9C99D661C332A40744DD5F /* IslandStateMachine.swift */; };
+		9BA6B40E9E37141A95615F3B /* PillCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E28B60FC91B7CB45DCB1E8 /* PillCatalog.swift */; };
+		9C95820D1B270DDA7A72468F /* ResendPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6800D9F85B49B05DEB7104F2 /* ResendPoller.swift */; };
+		9F2FADD1CB2F778206A7F672 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73418B06032CC379F12AD5F /* AppState.swift */; };
+		A27A60DF2F6A57A79BB86E64 /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A039221E982BC1A94B5BBADF /* AppLog.swift */; };
+		ADE6540CD362A42D37ED940E /* IslandViewContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC52CEDD00A5A6B399C8BB0 /* IslandViewContent.swift */; };
+		AFD5BA09E6E6A19C74818D21 /* CalcomPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4761F654239F5E2CC0375F46 /* CalcomPoller.swift */; };
+		B4C10CCA97E4D98453FD76DB /* GreetingCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD4F6579FD20610B45E7148 /* GreetingCanvasView.swift */; };
+		B861462C981BC165BBED7FE9 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C73418B06032CC379F12AD5F /* AppState.swift */; };
+		B92169420DDBD90109508EF3 /* SafeWebURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8C74B35163A2A0D0F51415B /* SafeWebURL.swift */; };
+		BC126084004ECCEF93C3C788 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC245872AC55AA412ECB0A36 /* SettingsView.swift */; };
+		BD300B9E9CA955643559DD80 /* IslandViewContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC52CEDD00A5A6B399C8BB0 /* IslandViewContent.swift */; };
+		C2E76680AEDDBB57FBA635DB /* VercelPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A1AF9BBCA06C760B8BF4961 /* VercelPoller.swift */; };
+		C37B509DCDCFBA97B85C35FD /* UploadCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354A45A3A64A56B73D833556 /* UploadCanvasView.swift */; };
+		C98BF35B0403D2C3F2239AB5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC245872AC55AA412ECB0A36 /* SettingsView.swift */; };
+		D0E525593FFF79487B20CBFE /* GithubPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908B50F048A505A563E8CCFE /* GithubPoller.swift */; };
+		D3C2064BB3EAD9C68A44A838 /* IslandWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748EAADD985B69637C06C12E /* IslandWindowController.swift */; };
+		D45326884C3BFFC32861F3CA /* AppLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A039221E982BC1A94B5BBADF /* AppLog.swift */; };
+		E6167C2BDD117724928BB94E /* HookServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9DDAA82F3F7FB545681324B /* HookServer.swift */; };
+		E96ABBC41C6137516932FF78 /* IslandScreenGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31BFA05E05A45B0CA4079BC /* IslandScreenGeometry.swift */; };
+		EABE8DE17065D7BDB5B15342 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = AC42619FECAE053E0E17EEB5 /* sounds */; };
+		EC365210A461A1BD46155525 /* NotchBuddyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C271D9B599FC670B3574794 /* NotchBuddyApp.swift */; };
+		EEB8CF6C0716A40B2E98B245 /* UploadCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 354A45A3A64A56B73D833556 /* UploadCanvasView.swift */; };
+		EF87AB9F72A9B09E4D60207D /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = AC42619FECAE053E0E17EEB5 /* sounds */; };
+		F460A72BE4E999C24E72B832 /* BotCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBCDABF824457F04FE4EA786 /* BotCanvasView.swift */; };
+		FB6C2818B2A809C27A5C01C6 /* GreetingCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD4F6579FD20610B45E7148 /* GreetingCanvasView.swift */; };
+		FBEDE6E4258A53CF4335D2A2 /* GithubPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 908B50F048A505A563E8CCFE /* GithubPoller.swift */; };
+		FC9CC3AC9D05D94F00C746D9 /* NotionPoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD5809B6F06DDE569B5C858 /* NotionPoller.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1679AF902D714AE7A65DB024 /* UploadSequenceEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadSequenceEngine.swift; sourceTree = "<group>"; };
+		23D2613174EA243AC450C080 /* IslandRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslandRootView.swift; sourceTree = "<group>"; };
+		354A45A3A64A56B73D833556 /* UploadCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCanvasView.swift; sourceTree = "<group>"; };
+		35E28B60FC91B7CB45DCB1E8 /* PillCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PillCatalog.swift; sourceTree = "<group>"; };
+		3846A6371A9CF975BCD255DB /* HeylloAppStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HeylloAppStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		42B7BCC569F7BDD191851CAD /* N8nPoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = N8nPoller.swift; sourceTree = "<group>"; };
+		4761F654239F5E2CC0375F46 /* CalcomPoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalcomPoller.swift; sourceTree = "<group>"; };
+		5EC52CEDD00A5A6B399C8BB0 /* IslandViewContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslandViewContent.swift; sourceTree = "<group>"; };
+		65BD51FA34B3C1A722C7F25D /* SoundEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundEngine.swift; sourceTree = "<group>"; };
+		6800D9F85B49B05DEB7104F2 /* ResendPoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResendPoller.swift; sourceTree = "<group>"; };
+		70D72628CD9BB85BF16A5FEE /* WindowContextCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowContextCapture.swift; sourceTree = "<group>"; };
+		748EAADD985B69637C06C12E /* IslandWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslandWindowController.swift; sourceTree = "<group>"; };
+		886A4655E48596E9775FEF51 /* StripePoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StripePoller.swift; sourceTree = "<group>"; };
+		908B50F048A505A563E8CCFE /* GithubPoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubPoller.swift; sourceTree = "<group>"; };
+		9843D0F41943AEA754DD5CDE /* IslandTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslandTypes.swift; sourceTree = "<group>"; };
+		9A1AF9BBCA06C760B8BF4961 /* VercelPoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VercelPoller.swift; sourceTree = "<group>"; };
+		9C271D9B599FC670B3574794 /* NotchBuddyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotchBuddyApp.swift; sourceTree = "<group>"; };
+		9F643B3BF9F2B01705640D8A /* Heyllo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Heyllo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F9C99D661C332A40744DD5F /* IslandStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslandStateMachine.swift; sourceTree = "<group>"; };
+		A039221E982BC1A94B5BBADF /* AppLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLog.swift; sourceTree = "<group>"; };
+		A8C74B35163A2A0D0F51415B /* SafeWebURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeWebURL.swift; sourceTree = "<group>"; };
+		AC42619FECAE053E0E17EEB5 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sounds; path = Resources/sounds; sourceTree = SOURCE_ROOT; };
+		AF7C918AF7882BD992ED920E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B31BFA05E05A45B0CA4079BC /* IslandScreenGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IslandScreenGeometry.swift; sourceTree = "<group>"; };
+		B82D1F74DAE31AEBBD6A6A02 /* BotEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotEngine.swift; sourceTree = "<group>"; };
+		BB8CB5432B2DC2142F58C099 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C73418B06032CC379F12AD5F /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		C9DDAA82F3F7FB545681324B /* HookServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookServer.swift; sourceTree = "<group>"; };
+		CC245872AC55AA412ECB0A36 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		DBD4F6579FD20610B45E7148 /* GreetingCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreetingCanvasView.swift; sourceTree = "<group>"; };
+		DDD5809B6F06DDE569B5C858 /* NotionPoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotionPoller.swift; sourceTree = "<group>"; };
+		DE6CA8BEAD1FAA1B8C544236 /* FileDropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDropView.swift; sourceTree = "<group>"; };
+		EA5B8F7CC58EAA25D495450F /* ClaudeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeService.swift; sourceTree = "<group>"; };
+		EBCDABF824457F04FE4EA786 /* BotCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BotCanvasView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		23305BFB31A9401A406F89A5 = {
+			isa = PBXGroup;
+			children = (
+				AF7C918AF7882BD992ED920E /* Assets.xcassets */,
+				C6BC9A3F9945E2EA77F97FFC /* Resources */,
+				816E048356882A52A62C5EE8 /* Sources */,
+				700EBFCA5AC73815348298BF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		700EBFCA5AC73815348298BF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9F643B3BF9F2B01705640D8A /* Heyllo.app */,
+				3846A6371A9CF975BCD255DB /* HeylloAppStore.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		816E048356882A52A62C5EE8 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				882901743218B0A9D9DC3949 /* App */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		882901743218B0A9D9DC3949 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				BB8CB5432B2DC2142F58C099 /* AppDelegate.swift */,
+				A039221E982BC1A94B5BBADF /* AppLog.swift */,
+				C73418B06032CC379F12AD5F /* AppState.swift */,
+				EBCDABF824457F04FE4EA786 /* BotCanvasView.swift */,
+				B82D1F74DAE31AEBBD6A6A02 /* BotEngine.swift */,
+				4761F654239F5E2CC0375F46 /* CalcomPoller.swift */,
+				EA5B8F7CC58EAA25D495450F /* ClaudeService.swift */,
+				DE6CA8BEAD1FAA1B8C544236 /* FileDropView.swift */,
+				908B50F048A505A563E8CCFE /* GithubPoller.swift */,
+				DBD4F6579FD20610B45E7148 /* GreetingCanvasView.swift */,
+				C9DDAA82F3F7FB545681324B /* HookServer.swift */,
+				23D2613174EA243AC450C080 /* IslandRootView.swift */,
+				B31BFA05E05A45B0CA4079BC /* IslandScreenGeometry.swift */,
+				9F9C99D661C332A40744DD5F /* IslandStateMachine.swift */,
+				9843D0F41943AEA754DD5CDE /* IslandTypes.swift */,
+				5EC52CEDD00A5A6B399C8BB0 /* IslandViewContent.swift */,
+				748EAADD985B69637C06C12E /* IslandWindowController.swift */,
+				42B7BCC569F7BDD191851CAD /* N8nPoller.swift */,
+				9C271D9B599FC670B3574794 /* NotchBuddyApp.swift */,
+				DDD5809B6F06DDE569B5C858 /* NotionPoller.swift */,
+				35E28B60FC91B7CB45DCB1E8 /* PillCatalog.swift */,
+				6800D9F85B49B05DEB7104F2 /* ResendPoller.swift */,
+				A8C74B35163A2A0D0F51415B /* SafeWebURL.swift */,
+				CC245872AC55AA412ECB0A36 /* SettingsView.swift */,
+				65BD51FA34B3C1A722C7F25D /* SoundEngine.swift */,
+				886A4655E48596E9775FEF51 /* StripePoller.swift */,
+				354A45A3A64A56B73D833556 /* UploadCanvasView.swift */,
+				1679AF902D714AE7A65DB024 /* UploadSequenceEngine.swift */,
+				9A1AF9BBCA06C760B8BF4961 /* VercelPoller.swift */,
+				70D72628CD9BB85BF16A5FEE /* WindowContextCapture.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		C6BC9A3F9945E2EA77F97FFC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AC42619FECAE053E0E17EEB5 /* sounds */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7C7F0A946C621980DAF804A0 /* Heyllo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 024FF6EDEE38070955027306 /* Build configuration list for PBXNativeTarget "Heyllo" */;
+			buildPhases = (
+				BAC3D44BEC814491B0F7F47A /* Sources */,
+				63E85B675AA36DD49C63BFE2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Heyllo;
+			packageProductDependencies = (
+			);
+			productName = Heyllo;
+			productReference = 9F643B3BF9F2B01705640D8A /* Heyllo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F32E97E3411E66722E19134A /* HeylloAppStore */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 448A0395C31474C9764546BD /* Build configuration list for PBXNativeTarget "HeylloAppStore" */;
+			buildPhases = (
+				FD43E0FBB275645B161F27E2 /* Sources */,
+				F7EC9A989EE974A768BFEE9C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HeylloAppStore;
+			packageProductDependencies = (
+			);
+			productName = HeylloAppStore;
+			productReference = 3846A6371A9CF975BCD255DB /* HeylloAppStore.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		640719108323902E57F09C41 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2700;
+				TargetAttributes = {
+					7C7F0A946C621980DAF804A0 = {
+						ProvisioningStyle = Manual;
+					};
+					F32E97E3411E66722E19134A = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 30DC7904DD60198EFADBF03B /* Build configuration list for PBXProject "Heyllo" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 23305BFB31A9401A406F89A5;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 700EBFCA5AC73815348298BF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7C7F0A946C621980DAF804A0 /* Heyllo */,
+				F32E97E3411E66722E19134A /* HeylloAppStore */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		63E85B675AA36DD49C63BFE2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				67974867A711FC7A5DB47234 /* Assets.xcassets in Resources */,
+				EF87AB9F72A9B09E4D60207D /* sounds in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F7EC9A989EE974A768BFEE9C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61047BD953AC22EAE4E4A4BA /* Assets.xcassets in Resources */,
+				EABE8DE17065D7BDB5B15342 /* sounds in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BAC3D44BEC814491B0F7F47A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0428A977CDC31762FF00B79E /* AppDelegate.swift in Sources */,
+				A27A60DF2F6A57A79BB86E64 /* AppLog.swift in Sources */,
+				B861462C981BC165BBED7FE9 /* AppState.swift in Sources */,
+				F460A72BE4E999C24E72B832 /* BotCanvasView.swift in Sources */,
+				42B0CCCC39FDCF9AA8049456 /* BotEngine.swift in Sources */,
+				8164ACD1746874F17AACD268 /* CalcomPoller.swift in Sources */,
+				87FC6F05506BE4618FA80E02 /* ClaudeService.swift in Sources */,
+				657EE035FE6872FFFD7E27F1 /* FileDropView.swift in Sources */,
+				D0E525593FFF79487B20CBFE /* GithubPoller.swift in Sources */,
+				B4C10CCA97E4D98453FD76DB /* GreetingCanvasView.swift in Sources */,
+				5E38D4C5F79E10666DB83344 /* HookServer.swift in Sources */,
+				4CEA81C2F1BFE48CDE6706CD /* IslandRootView.swift in Sources */,
+				255F3FDD73A2987848A1A173 /* IslandScreenGeometry.swift in Sources */,
+				09D3D0AEDC9E063650003643 /* IslandStateMachine.swift in Sources */,
+				2ECE5EAEA98DAEC324DEA3B5 /* IslandTypes.swift in Sources */,
+				ADE6540CD362A42D37ED940E /* IslandViewContent.swift in Sources */,
+				D3C2064BB3EAD9C68A44A838 /* IslandWindowController.swift in Sources */,
+				303C70858019BAC3AC4CC3A8 /* N8nPoller.swift in Sources */,
+				350D39F0316A773F7C70A4BC /* NotchBuddyApp.swift in Sources */,
+				28DFBB24539739A9B51BFA88 /* NotionPoller.swift in Sources */,
+				9BA6B40E9E37141A95615F3B /* PillCatalog.swift in Sources */,
+				3DFBE8A50559DD3A5B491ACC /* ResendPoller.swift in Sources */,
+				1C0CCB4CC587265311B92FC2 /* SafeWebURL.swift in Sources */,
+				C98BF35B0403D2C3F2239AB5 /* SettingsView.swift in Sources */,
+				20240532C3D5437DC427CBF8 /* SoundEngine.swift in Sources */,
+				2D920F1C939BFC20411AFF34 /* StripePoller.swift in Sources */,
+				C37B509DCDCFBA97B85C35FD /* UploadCanvasView.swift in Sources */,
+				78B11F33EAAFCB7E9EAAA433 /* UploadSequenceEngine.swift in Sources */,
+				4A4E3F23CAEF75A16AA81393 /* VercelPoller.swift in Sources */,
+				594B54C36C2A380BE3A3ABB3 /* WindowContextCapture.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD43E0FBB275645B161F27E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				25885B633AAEFFCDF2EDC6D0 /* AppDelegate.swift in Sources */,
+				D45326884C3BFFC32861F3CA /* AppLog.swift in Sources */,
+				9F2FADD1CB2F778206A7F672 /* AppState.swift in Sources */,
+				3197B89CCD203E87F084AD40 /* BotCanvasView.swift in Sources */,
+				06BAB9927E840E634ACB90EE /* BotEngine.swift in Sources */,
+				AFD5BA09E6E6A19C74818D21 /* CalcomPoller.swift in Sources */,
+				78BB76B91160BD31B2A063B6 /* ClaudeService.swift in Sources */,
+				78EECBBF38C205092C586D41 /* FileDropView.swift in Sources */,
+				FBEDE6E4258A53CF4335D2A2 /* GithubPoller.swift in Sources */,
+				FB6C2818B2A809C27A5C01C6 /* GreetingCanvasView.swift in Sources */,
+				E6167C2BDD117724928BB94E /* HookServer.swift in Sources */,
+				8C83A3F6E5181B870457CCF8 /* IslandRootView.swift in Sources */,
+				E96ABBC41C6137516932FF78 /* IslandScreenGeometry.swift in Sources */,
+				90023BF1F2EBE7103DF57E28 /* IslandStateMachine.swift in Sources */,
+				47C66F91EB52D2D1043D5123 /* IslandTypes.swift in Sources */,
+				BD300B9E9CA955643559DD80 /* IslandViewContent.swift in Sources */,
+				3BC34209CB2AC2B01B1E698F /* IslandWindowController.swift in Sources */,
+				4262A8498F82C85C51E29152 /* N8nPoller.swift in Sources */,
+				EC365210A461A1BD46155525 /* NotchBuddyApp.swift in Sources */,
+				FC9CC3AC9D05D94F00C746D9 /* NotionPoller.swift in Sources */,
+				55483F330BE76742ACC6CE0A /* PillCatalog.swift in Sources */,
+				9C95820D1B270DDA7A72468F /* ResendPoller.swift in Sources */,
+				B92169420DDBD90109508EF3 /* SafeWebURL.swift in Sources */,
+				BC126084004ECCEF93C3C788 /* SettingsView.swift in Sources */,
+				12078EE426C5CCD59C52FC28 /* SoundEngine.swift in Sources */,
+				5AF5021E1BB90017D25E1047 /* StripePoller.swift in Sources */,
+				EEB8CF6C0716A40B2E98B245 /* UploadCanvasView.swift in Sources */,
+				8FDB2BE1175D72ECB4F45707 /* UploadSequenceEngine.swift in Sources */,
+				C2E76680AEDDBB57FBA635DB /* VercelPoller.swift in Sources */,
+				0F4B58B6C7CB657D5EEFBD10 /* WindowContextCapture.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0F983138A94579C9DA2A762F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_ENTITLEMENTS = Resources/HeylloAppStore.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Resources/InfoAppStore.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.heyllo-appstore";
+				PRODUCT_NAME = Heyllo;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = APPSTORE;
+			};
+			name = Release;
+		};
+		25F83D745502CA60A7166A56 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "-strict-concurrency=complete";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		6190FA28D1C4220EC34811F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_REQUIRED = YES;
+				CODE_SIGN_ENTITLEMENTS = Resources/Heyllo.entitlements;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				OTHER_CODE_SIGN_FLAGS = "--timestamp";
+				OTHER_SWIFT_FLAGS = "-strict-concurrency=complete";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B7F3B2F11F0A86EE17DF92A2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_SANDBOX = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.heyllo;
+				PRODUCT_NAME = Heyllo;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		D210EC938BD2F46291F537FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_SANDBOX = NO;
+				INFOPLIST_FILE = Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.heyllo;
+				PRODUCT_NAME = Heyllo;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DD05ABC83A50D340BD2FCF69 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGN_ENTITLEMENTS = Resources/HeylloAppStore.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Resources/InfoAppStore.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "app.heyllo-appstore";
+				PRODUCT_NAME = Heyllo;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = APPSTORE;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		024FF6EDEE38070955027306 /* Build configuration list for PBXNativeTarget "Heyllo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D210EC938BD2F46291F537FC /* Debug */,
+				B7F3B2F11F0A86EE17DF92A2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		30DC7904DD60198EFADBF03B /* Build configuration list for PBXProject "Heyllo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				25F83D745502CA60A7166A56 /* Debug */,
+				6190FA28D1C4220EC34811F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		448A0395C31474C9764546BD /* Build configuration list for PBXNativeTarget "HeylloAppStore" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD05ABC83A50D340BD2FCF69 /* Debug */,
+				0F983138A94579C9DA2A762F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 640719108323902E57F09C41 /* Project object */;
+}
