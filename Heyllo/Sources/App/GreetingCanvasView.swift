@@ -241,73 +241,6 @@ private func gRR(_ ctx: CGContext, _ x: CGFloat, _ y: CGFloat, _ w: CGFloat, _ h
     ctx.closePath()
 }
 
-private func mochiPath(hw: CGFloat, hh: CGFloat) -> CGPath {
-    let n: CGFloat = 3.2
-    let path = CGMutablePath()
-    let steps = 96
-    for i in 0...steps {
-        let a = CGFloat(i)/CGFloat(steps)*2 * .pi
-        let ca = cos(a), sa = sin(a)
-        let px = hw * (ca < 0 ? -1 : 1) * pow(abs(ca), 2/n)
-        let py = hh * (sa < 0 ? -1 : 1) * pow(abs(sa), 2/n)
-        if i == 0 { path.move(to: CGPoint(x: px, y: py)) }
-        else { path.addLine(to: CGPoint(x: px, y: py)) }
-    }
-    path.closeSubpath(); return path
-}
-
-// Linear gradient fill clipped to path (body-local coords, centered at origin)
-private func whiteFill(_ ctx: CGContext, _ path: CGPath,
-                        x0: CGFloat, y0: CGFloat, x1: CGFloat, y1: CGFloat) {
-    let cs   = CGColorSpaceCreateDeviceRGB()
-    let c0   = CGColor(red: 251/255, green: 251/255, blue: 252/255, alpha: 1)
-    let c1   = CGColor(red: 231/255, green: 233/255, blue: 236/255, alpha: 1)
-    guard let g = CGGradient(colorsSpace: cs, colors: [c0,c1] as CFArray, locations: [0,1]) else { return }
-    ctx.saveGState()
-    ctx.addPath(path); ctx.clip()
-    ctx.drawLinearGradient(g, start: CGPoint(x: x0, y: y0), end: CGPoint(x: x1, y: y1), options: [])
-    ctx.restoreGState()
-}
-
-private func drawHandL(_ ctx: CGContext, hw: CGFloat, hh: CGFloat, p: GreetPose) {
-    let k = CGFloat(p.handL); guard k > 0.01 else { return }
-    let hb = hh*2, r = hb*0.15*k
-    let rx = gLerpF(-hw*0.35, -hw-hb*0.22, k)
-    let ry0 = gLerpF(hh*0.85, hh*0.62, k)
-    var ry = Double(ry0)
-    if p.wave >= 0 { ry += sin(p.wave*6)*Double(hb)*0.02 }
-    ctx.saveGState()
-    ctx.translateBy(x: rx, y: CGFloat(ry))
-    let circ = CGPath(ellipseIn: CGRect(x: -r, y: -r, width: r*2, height: r*2), transform: nil)
-    whiteFill(ctx, circ, x0: r, y0: -r, x1: -r, y1: r)
-    ctx.addEllipse(in: CGRect(x: -r, y: -r, width: r*2, height: r*2))
-    ctx.setStrokeColor(CGColor(red: 0, green: 0, blue: 0, alpha: 0.08))
-    ctx.setLineWidth(0.8); ctx.strokePath()
-    ctx.restoreGState()
-}
-
-private func drawHandR(_ ctx: CGContext, hw: CGFloat, hh: CGFloat, p: GreetPose) {
-    let k = CGFloat(p.handR); guard k > 0.01 else { return }
-    let hb = hh*2, L = hb*0.40*k, T2 = hb*0.22*k
-    let rx0 = gLerpF(hw*0.35, hw+hb*0.20, k)
-    let ry0 = gLerpF(hh*0.85, hh*0.20, k)
-    var rx = Double(rx0), ry = Double(ry0), ang = -0.61
-    if p.wave >= 0 {
-        let w = p.wave*2 * .pi*2.5
-        ang += sin(w)*0.21; ry += sin(w+0.8)*Double(hb)*0.04; rx += cos(w)*Double(hb)*0.015
-    }
-    ctx.saveGState()
-    ctx.translateBy(x: CGFloat(rx), y: CGFloat(ry)); ctx.rotate(by: CGFloat(ang))
-    let cap = CGMutablePath()
-    gRR(ctx, -L/2, -T2/2, L, T2, T2/2)
-    cap.addPath(ctx.path!); ctx.beginPath()  // use current ctx path as clip path
-    whiteFill(ctx, cap, x0: L/2, y0: -T2/2, x1: -L/2, y1: T2/2)
-    gRR(ctx, -L/2, -T2/2, L, T2, T2/2)
-    ctx.setStrokeColor(CGColor(red: 0, green: 0, blue: 0, alpha: 0.08))
-    ctx.setLineWidth(0.8); ctx.strokePath()
-    ctx.restoreGState()
-}
-
 private func drawMochi(_ ctx: CGContext, p: GreetPose) {
     let hh = CGFloat(p.hb/2), hw = hh*GASP; guard hh > 0.4 else { return }
 
@@ -350,61 +283,26 @@ private func drawMochi(_ ctx: CGContext, p: GreetPose) {
     ctx.rotate(by: CGFloat(p.tilt))
     ctx.scaleBy(x: CGFloat(p.sx), y: CGFloat(p.sy))
 
-    // Hands behind body
-    drawHandL(ctx, hw: hw, hh: hh, p: p)
-    drawHandR(ctx, hw: hw, hh: hh, p: p)
-
-    // Body
-    let mpath = mochiPath(hw: hw, hh: hh)
-    whiteFill(ctx, mpath, x0: hw*0.6, y0: -hh, x1: -hw*0.6, y1: hh)
-
-    // Blue tint overlay
-    if p.tint > 0 {
-        let cs = CGColorSpaceCreateDeviceRGB()
-        let c0 = CGColor(red: 127/255, green: 180/255, blue: 234/255, alpha: CGFloat(p.tint))
-        let c1 = CGColor(red: 127/255, green: 180/255, blue: 234/255, alpha: 0)
-        if let g = CGGradient(colorsSpace: cs, colors: [c0,c1] as CFArray, locations: [0,1]) {
-            ctx.saveGState()
-            ctx.addPath(mpath); ctx.clip()
-            ctx.drawLinearGradient(g, start: CGPoint(x: 0, y: hh), end: CGPoint(x: 0, y: -hh*0.1), options: [])
-            ctx.restoreGState()
+    let eyeShape: EyeShape = {
+        switch p.eye {
+        case .happy: return .happy
+        case .content: return .cup
+        case .dot: return .pill
         }
-    }
+    }()
 
-    // Eyes (clipped to body)
-    ctx.saveGState()
-    ctx.addPath(mpath); ctx.clip()
-    ctx.setFillColor(gHex("#16171A"))
-    ctx.setStrokeColor(gHex("#16171A"))
-    let er = CGFloat(p.hb*0.06)
-    let sp = CGFloat(p.hb*0.19)
-    let lx = CGFloat(p.lookX)*hw*0.42
-    let ly = CGFloat(p.lookY)*hh*0.28 + hh*0.12 + CGFloat(p.eyeRoll)*hh*1.25
-    for sd: CGFloat in [-1, 1] {
-        ctx.saveGState()
-        ctx.translateBy(x: sd*sp+lx, y: ly)
-        if p.eye == .happy {
-            ctx.setLineWidth(er*0.95)
-            ctx.setLineCap(.round)
-            ctx.beginPath()
-            ctx.addArc(center: CGPoint(x: 0, y: er*0.6), radius: er*1.25,
-                       startAngle: .pi*1.15, endAngle: .pi*1.85, clockwise: false)
-            ctx.strokePath()
-        } else if p.eye == .content {
-            ctx.setLineWidth(er*0.95)
-            ctx.setLineCap(.round)
-            ctx.beginPath()
-            ctx.addArc(center: CGPoint(x: 0, y: -er*0.5), radius: er*1.25,
-                       startAngle: .pi*0.15, endAngle: .pi*0.85, clockwise: false)
-            ctx.strokePath()
-        } else {
-            ctx.scaleBy(x: 1, y: max(0.12, CGFloat(p.open)))
-            ctx.addEllipse(in: CGRect(x: -er, y: -er, width: er*2, height: er*2))
-            ctx.fillPath()
-        }
-        ctx.restoreGState()
-    }
-    ctx.restoreGState()
+    let frame = LexyFrame(
+        rx: hw, ry: hh, morph: 0,
+        eye: eyeShape, eyeOpen: CGFloat(p.open),
+        lookX: CGFloat(p.lookX), lookY: CGFloat(p.lookY) + CGFloat(p.eyeRoll) * 2,
+        tint: CGFloat(p.tint),
+        tintColor: CGColor(red: 127/255, green: 180/255, blue: 234/255, alpha: 1),
+        bodyColor: nil, blush: 0,
+        showBowtie: true,
+        handsAmount: CGFloat(max(p.handL, p.handR))
+    )
+    drawLexyHands(cg: ctx, frame: frame, rx: hw, ry: hh)
+    drawLexyFace(cg: ctx, frame: frame)
 
     // Activity badge (top-left corner)
     if p.badge > 0.01 {
@@ -502,7 +400,7 @@ private func drawMinis(_ ctx: CGContext, alpha: Double, compact: IslandRestingLa
         let scale = CGFloat(alpha) * compact.miniGridScale
         ctx.scaleBy(x: scale, y: scale)
         ctx.setFillColor(gHex(miniColors[i]))
-        ctx.addPath(mochiPath(hw: 5.3, hh: 4)); ctx.fillPath()
+        ctx.addPath(lexyFacePath(rx: 5.3, ry: 4, morph: 0)); ctx.fillPath()
         ctx.restoreGState()
     }
 }
