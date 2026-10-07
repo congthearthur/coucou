@@ -1,8 +1,10 @@
-# Heyllo rebrand — intentional "coucou"/"mochi" occurrences
+# Heyllo rebrand — intentional "coucou"/"mochi"/"notchbuddy" occurrences
 
 Per the verification gate in docs/superpowers/specs/2026-10-02-heyllo-rebrand-design.md,
-`grep -ril "coucou|mochi"` (excluding .git/ and windows/) should match only the entries below.
-Any other match is a bug.
+`grep -rliE "coucou|mochi|notch.?buddy"` (excluding .git/ and windows/) should match only the
+entries below. The pattern is widened from the plan's literal `coucou|mochi` because the final
+review found real missed renames ("Notch Buddy", two words, and `NotchBuddy` in comments) that a
+narrower sweep couldn't see. Any other match is a bug.
 
 - `CHANGELOG.md` — historical changelog entries describing past releases under the old name.
 - `LICENSE-ASSETS.md` — one sentence crediting "the same courtesy this project extended to the
@@ -22,9 +24,11 @@ Any other match is a bug.
 - `docs/AGENTS.md`, `docs/privacy.html`, `docs/support.html` — real, unrenamed Windows/Linux
   field names (`coucou_agent`), paths (`%APPDATA%\Coucou`, `~/.config/coucou`, etc.) and package
   names (`sudo apt remove coucou`) for the untouched `windows/` relay and app.
-- `docs/index.html`, `docs/support.html`, `docs/terms.html`, `docs/legal.html`, `scripts/release.sh`
-  — GitHub repository URLs, contact emails and publisher/rights-holder names specific to the
-  original author, each marked with an adjacent `TODO(heyllo)` comment rather than guessed at.
+- `README.md`, `docs/index.html`, `docs/support.html`, `docs/terms.html`, `docs/legal.html`,
+  `scripts/release.sh` — GitHub repository URLs, contact emails and publisher/rights-holder names
+  specific to the original author, each marked with an adjacent `TODO(heyllo)` comment rather
+  than guessed at; plus `README.md`'s real, unrenamed Windows/Linux package names/binaries
+  (`coucou-hook`, `coucou-hook.exe`, `Coucou-Linux-*.AppImage/.deb/.rpm`).
 - `docs/SPEC.md` — two uses of "coucou" as a French idiom for a waving/peekaboo greeting gesture
   (`faire coucou`), unrelated to the brand name.
 - `.github/workflows/windows.yml`, `.github/workflows/linux.yml` — Windows/Linux release

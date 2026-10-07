@@ -12,7 +12,6 @@ enum EyeShape: String {
 // MARK: - Lexy tunable constants (renamed from MochiConst, same values)
 
 enum LexyConst {
-    static let eyeW: CGFloat  = 0.25
     static let eyeH: CGFloat  = 0.27
     static let eyeSp: CGFloat = 0.37
     static let eyeP: CGFloat  = -0.12
@@ -36,6 +35,11 @@ struct LexyFrame {
     var eyeOpen: CGFloat          // 0 = fully closed (blink), 1 = fully open
     var lookX: CGFloat            // -1...1, eye-cluster offset (pupil/gaze direction)
     var lookY: CGFloat
+    var yaw: CGFloat = 0          // head-turn animation (cursor tracking, scan sweep, wander)
+    var pitch: CGFloat = 0        // head-tilt animation
+    var roll: CGFloat = 0         // roll-through animation (dizzy spin)
+    var es: CGFloat = 1           // eye-scale tween (emotes)
+    var isMini: Bool = false      // mini pill bot — uses LexyConst.miniInk instead of .ink
     var tint: CGFloat             // 0...1 color wash strength (state color, e.g. "thinking" purple)
     var tintColor: CGColor?       // nil = no tint
     var bodyColor: CGColor?       // nil = default LexyConst.baseTop/baseBottom gradient
@@ -53,7 +57,7 @@ struct LexyFrame {
 func lexyFacePath(rx: CGFloat, ry: CGFloat, morph: CGFloat) -> CGPath {
     let path = CGMutablePath()
     let dotRadius = min(rx, ry) * 0.30
-    let roundPositions = lexyRingDotPositions(rx: rx * 0.78, ry: ry * 0.78, count: 10)
+    let roundPositions = lexyRingDotPositions(rx: rx * 0.78, ry: ry * 0.78, count: 15)
     let boxPositions = lexyGridDotPositions(rx: rx * 0.86, ry: ry * 0.86, cols: 5, rows: 3)
     let count = min(roundPositions.count, boxPositions.count)
     for i in 0..<count {
@@ -103,22 +107,28 @@ private func lexyEyeDotOffsets(for shape: EyeShape) -> [CGPoint] {
     }
 }
 
-/// Draws the two eye-dot-clusters, clipped to the face path, offset by lookX/lookY.
+/// Draws one eye-dot-cluster centered at `center`, clipped to the face path by the caller.
+private func drawLexyEyeCluster(cg: CGContext, frame: LexyFrame, rx: CGFloat, ry: CGFloat, center: CGPoint) {
+    let eyeDotR = min(rx, ry) * LexyConst.eyeH * 0.22 * max(0.15, frame.eyeOpen) * frame.es
+    let ink = frame.isMini ? LexyConst.miniInk : LexyConst.ink
+    for offset in lexyEyeDotOffsets(for: frame.eye) {
+        let x = center.x + offset.x * rx
+        let y = center.y + offset.y * ry
+        cg.setFillColor(ink)
+        cg.fillEllipse(in: CGRect(x: x - eyeDotR, y: y - eyeDotR, width: eyeDotR * 2, height: eyeDotR * 2))
+    }
+}
+
+/// Draws both eye-dot-clusters, clipped to the face path, offset by lookX/lookY and by the
+/// yaw/pitch/roll head-motion animation (cursor tracking, scan sweep, dizzy spin, mini wander).
 func drawLexyEyes(cg: CGContext, frame: LexyFrame, rx: CGFloat, ry: CGFloat) {
-    let eyeDotR = min(rx, ry) * LexyConst.eyeH * 0.22 * max(0.15, frame.eyeOpen)
     let sp = ry * LexyConst.eyeSp
-    let baseY = ry * LexyConst.eyeP + frame.lookY * ry * 0.18
-    let lookOffsetX = frame.lookX * rx * 0.12
+    let baseY = ry * LexyConst.eyeP + frame.lookY * ry * 0.18 + sin(frame.pitch + frame.roll) * ry * 0.25
+    let lookOffsetX = frame.lookX * rx * 0.12 + sin(frame.yaw) * rx * 0.25
 
     for side: CGFloat in [-1, 1] {
         let centerX = side * sp + lookOffsetX
-        let offsets = lexyEyeDotOffsets(for: frame.eye)
-        for offset in offsets {
-            let x = centerX + offset.x * rx
-            let y = baseY + offset.y * ry
-            cg.setFillColor(frame.bodyColor != nil ? LexyConst.ink : LexyConst.ink)
-            cg.fillEllipse(in: CGRect(x: x - eyeDotR, y: y - eyeDotR, width: eyeDotR * 2, height: eyeDotR * 2))
-        }
+        drawLexyEyeCluster(cg: cg, frame: frame, rx: rx, ry: ry, center: CGPoint(x: centerX, y: baseY))
     }
 }
 
@@ -194,23 +204,34 @@ private func mixDarker(_ color: CGColor) -> CGColor {
 // MARK: - Hands (dot-cluster form, replaces BotEngine's ellipse hands and
 // GreetingCanvasView's drawHandL/drawHandR)
 
-func drawLexyHands(cg: CGContext, frame: LexyFrame, rx: CGFloat, ry: CGFloat) {
+/// Draws one hand at `center`, already positioned/clipped by the caller.
+private func drawLexyHandAt(cg: CGContext, frame: LexyFrame, rx: CGFloat, ry: CGFloat, center: CGPoint) {
     guard frame.handsAmount > 0.01 else { return }
     let handR = min(rx, ry) * 0.16 * frame.handsAmount
+    cg.setFillColor((frame.bodyColor ?? LexyConst.baseTop))
+    cg.fillEllipse(in: CGRect(x: center.x - handR, y: center.y - handR, width: handR * 2, height: handR * 2))
+    cg.setStrokeColor(CGColor(red: 0, green: 0, blue: 0, alpha: 0.08))
+    cg.setLineWidth(1)
+    cg.strokeEllipse(in: CGRect(x: center.x - handR, y: center.y - handR, width: handR * 2, height: handR * 2))
+}
+
+/// Draws one hand at the origin — for callers (like BotEngine's drawHandsBehind) that compute
+/// each hand's own world position themselves and translate `cg` there before calling this.
+func drawLexyHand(cg: CGContext, frame: LexyFrame, rx: CGFloat, ry: CGFloat) {
+    drawLexyHandAt(cg: cg, frame: frame, rx: rx, ry: ry, center: .zero)
+}
+
+/// Draws both hands, mirrored left/right — for callers (like GreetingCanvasView) that pass one
+/// shared body frame and let this function place both hands relative to the body.
+func drawLexyHands(cg: CGContext, frame: LexyFrame, rx: CGFloat, ry: CGFloat) {
     for side: CGFloat in [-1, 1] {
-        let x = side * rx * 1.08
-        let y = ry * 0.70
-        cg.setFillColor((frame.bodyColor ?? LexyConst.baseTop))
-        cg.fillEllipse(in: CGRect(x: x - handR, y: y - handR, width: handR * 2, height: handR * 2))
-        cg.setStrokeColor(CGColor(red: 0, green: 0, blue: 0, alpha: 0.08))
-        cg.setLineWidth(1)
-        cg.strokeEllipse(in: CGRect(x: x - handR, y: y - handR, width: handR * 2, height: handR * 2))
+        drawLexyHandAt(cg: cg, frame: frame, rx: rx, ry: ry, center: CGPoint(x: side * rx * 1.08, y: ry * 0.70))
     }
 }
 
-/// Narrow entry point for callers (like the upload sequence) that draw their own body and
-/// only need Lexy's eye-dot cluster drawn at the origin, already clipped/positioned by the
-/// caller.
+/// Narrow entry point for callers (like the upload sequence) that draw their own body, have
+/// already translated `cg` to one eye's position, and only need a single eye-dot cluster drawn
+/// at the origin — unlike `drawLexyEyes`, this draws exactly one cluster, not a left/right pair.
 func drawLexyEyeDotsOnly(cg: CGContext, frame: LexyFrame, rx: CGFloat, ry: CGFloat) {
-    drawLexyEyes(cg: cg, frame: frame, rx: rx, ry: ry)
+    drawLexyEyeCluster(cg: cg, frame: frame, rx: rx, ry: ry, center: .zero)
 }

@@ -843,22 +843,22 @@ struct GhostBotView: View {
 // MARK: - Notification names
 
 extension Notification.Name {
-    static let triggerEmote     = Notification.Name("notchBuddy.triggerEmote")
-    static let triggerSlap      = Notification.Name("notchBuddy.triggerSlap")
-    static let botDizzy         = Notification.Name("notchBuddy.botDizzy")
-    static let botGreet         = Notification.Name("notchBuddy.botGreet")
-    static let botBlink         = Notification.Name("notchBuddy.botBlink")
-    static let botSetTgEs       = Notification.Name("notchBuddy.botSetTgEs")
-    static let botGulp          = Notification.Name("notchBuddy.botGulp")
-    static let botMorphTo       = Notification.Name("notchBuddy.botMorphTo")
-    static let islandAction     = Notification.Name("notchBuddy.islandAction")
-    static let islandCollapse   = Notification.Name("notchBuddy.islandCollapse")
-    static let openFullSettings = Notification.Name("notchBuddy.openFullSettings")
-    static let hookReveal       = Notification.Name("notchBuddy.hookReveal")
+    static let triggerEmote     = Notification.Name("heyllo.triggerEmote")
+    static let triggerSlap      = Notification.Name("heyllo.triggerSlap")
+    static let botDizzy         = Notification.Name("heyllo.botDizzy")
+    static let botGreet         = Notification.Name("heyllo.botGreet")
+    static let botBlink         = Notification.Name("heyllo.botBlink")
+    static let botSetTgEs       = Notification.Name("heyllo.botSetTgEs")
+    static let botGulp          = Notification.Name("heyllo.botGulp")
+    static let botMorphTo       = Notification.Name("heyllo.botMorphTo")
+    static let islandAction     = Notification.Name("heyllo.islandAction")
+    static let islandCollapse   = Notification.Name("heyllo.islandCollapse")
+    static let openFullSettings = Notification.Name("heyllo.openFullSettings")
+    static let hookReveal       = Notification.Name("heyllo.hookReveal")
     // Greeting ↔ IslandWindowController
-    static let greetComplete    = Notification.Name("notchBuddy.greetComplete")
-    static let greetingHover    = Notification.Name("notchBuddy.greetingHover")
-    static let greetingInterrupt = Notification.Name("notchBuddy.greetingInterrupt")
+    static let greetComplete    = Notification.Name("heyllo.greetComplete")
+    static let greetingHover    = Notification.Name("heyllo.greetingHover")
+    static let greetingInterrupt = Notification.Name("heyllo.greetingInterrupt")
 }
 
 // MARK: - islandSize (takes real notch dimensions)

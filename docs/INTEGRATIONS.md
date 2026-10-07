@@ -1,4 +1,4 @@
-# Notch Buddy — intégrations
+# Heyllo — intégrations
 
 Règle d'or : **vérifier la doc officielle au moment d'implémenter**. Les formats ci-dessous sont le plan, pas une garantie. Sources à relire :
 - Hooks Claude Code : https://code.claude.com/docs/en/hooks
@@ -13,7 +13,7 @@ Règle d'or : **vérifier la doc officielle au moment d'implémenter**. Les form
 ```
 claude (terminal, VS Code, app Claude)
   └─ hook "command" ─► nb-hook (petit exécutable Swift, livré avec l'app)
-                         └─ socket Unix ─► Notch Buddy.app
+                         └─ socket Unix ─► Heyllo.app
                          ◄─ décision (pour PermissionRequest)
 ```
 - `nb-hook` (script shell) et `nb-hook.py` (relais Python) : écrits par l'app (`HookServer.swift`). Version GitHub : au lancement, dans `~/Library/Application Support/Heyllo/`. Version App Store : à l'installation des hooks, dans `~/.claude/heyllo/`. Voir `docs/AGENTS.md` pour les autres agents qui utilisent ces scripts.
@@ -62,9 +62,9 @@ Demande l'autorisation Automatisation la première fois (normal).
 ### Installation des hooks : procédure obligatoire
 1. Lire `~/.claude/settings.json` (le créer s'il n'existe pas).
 2. Copier en `~/.claude/settings.json.bak-AAAAMMJJ-HHMM`.
-3. **Fusionner** : ajouter les hooks Notch Buddy sans toucher aux hooks existants. Chemin de `nb-hook` entre guillemets (il contient un espace).
+3. **Fusionner** : ajouter les hooks Heyllo sans toucher aux hooks existants. Chemin de `nb-hook` entre guillemets (il contient un espace).
 4. Montrer le diff à Louis, attendre son OK, écrire.
-5. Bouton « Désinstaller les hooks » dans les réglages qui retire uniquement les entrées Notch Buddy.
+5. Bouton « Désinstaller les hooks » dans les réglages qui retire uniquement les entrées Heyllo.
 
 ---
 

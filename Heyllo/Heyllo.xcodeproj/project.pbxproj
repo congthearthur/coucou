@@ -242,9 +242,6 @@
 					7C7F0A946C621980DAF804A0 = {
 						ProvisioningStyle = Manual;
 					};
-					F32E97E3411E66722E19134A = {
-						ProvisioningStyle = Automatic;
-					};
 				};
 			};
 			buildConfigurationList = 30DC7904DD60198EFADBF03B /* Build configuration list for PBXProject "Heyllo" */;
@@ -565,10 +562,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_ALLOWED = YES;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_ENTITLEMENTS = Resources/HeylloAppStore.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Resources/InfoAppStore.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

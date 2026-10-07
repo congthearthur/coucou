@@ -799,6 +799,7 @@ final class BotEngine: ObservableObject {
             rx: rx, ry: ry, morph: morph,
             eye: activeEye, eyeOpen: open,
             lookX: cfg.look?.x ?? 0, lookY: cfg.look?.y ?? 0,
+            yaw: yaw, pitch: pitch, roll: roll, es: es, isMini: isMini,
             tint: tint, tintColor: cfg.color,
             bodyColor: bodyColor,
             blush: max(blush, tint * 0.5) * (1 - morph),
@@ -926,14 +927,16 @@ final class BotEngine: ObservableObject {
             var handCtx = context
             handCtx.translateBy(x: worldX, y: worldY)
             if handRot != 0 { handCtx.rotate(by: .radians(handRot)) }
+            // hew/heh already incorporate `hands` (half-width/-height scale with it above), so
+            // handsAmount is 1 here — passing `hands` again would scale the hand size by hands².
             let frame = LexyFrame(
                 rx: rx, ry: ry, morph: 0, eye: .pill, eyeOpen: 1,
                 lookX: 0, lookY: 0, tint: 0, tintColor: nil,
                 bodyColor: bodyColor, blush: 0, showBowtie: false,
-                handsAmount: hands
+                handsAmount: 1
             )
             handCtx.withCGContext { cg in
-                drawLexyHands(cg: cg, frame: frame, rx: hew, ry: heh)
+                drawLexyHand(cg: cg, frame: frame, rx: hew, ry: heh)
             }
         }
     }

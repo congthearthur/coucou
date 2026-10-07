@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — Heyllo rebrand
+
+- Renamed from Coucou/Mochi to Heyllo/Lexy (new bundle IDs, new character, new icon and sounds).
+  **Not an in-place update** — this is a fresh, independently-named fork, so a few things reset:
+  - **Your saved API keys will need to be re-entered.** The macOS Keychain service identifier
+    changed along with the bundle ID, which orphans any key saved under the old Coucou
+    identity — there is no migration, and this is expected, not a bug or data loss.
+  - **macOS will ask you again** for Accessibility/Automation permissions the first time you use
+    a feature that needs them, since the new bundle identifier is a new app as far as macOS is
+    concerned.
+
 ## 0.1.1 — October 2, 2026
 
 - Declare the tools you use in Settings: Gemini CLI, Antigravity, Anthropic, Google AI and OpenAI pills join the existing ones (Cursor and Codex pills are coming soon), and you pick the main pill.

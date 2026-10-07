@@ -18,7 +18,7 @@ final class HookServer: @unchecked Sendable {
     static var socketPath: String {
         #if APPSTORE
         // Container home root keeps path ≤ 103 bytes (sun_path limit on macOS is 104 incl. NUL)
-        // ~/Library/Containers/app.heyllo-appstore/Data/nb.sock = 53 bytes ✓
+        // /Users/louis/Library/Containers/app.heyllo-appstore/Data/nb.sock = 64 bytes ✓
         return NSHomeDirectory() + "/nb.sock"
         #else
         return supportDir.appendingPathComponent("nb.sock").path
@@ -164,7 +164,7 @@ final class HookServer: @unchecked Sendable {
         let sessionId = payload["session_id"] as? String ?? "unknown"
         let cwd = payload["cwd"] as? String ?? ""
         let rawName = URL(fileURLWithPath: cwd).lastPathComponent
-        let projectName = aliasProjectName(rawName.isEmpty ? "Session" : rawName)
+        let projectName = rawName.isEmpty ? "Session" : rawName
 
         // Determine which pill this event belongs to.
         // heyllo_agent must be lowercase, digits and hyphens, ≤ 24 chars.
@@ -347,7 +347,7 @@ final class HookServer: @unchecked Sendable {
         let sessionId = payload["session_id"] as? String ?? "unknown"
         let cwd       = payload["cwd"]        as? String ?? ""
         let rawName   = URL(fileURLWithPath: cwd).lastPathComponent
-        let projectName = aliasProjectName(rawName.isEmpty ? "Session" : rawName)
+        let projectName = rawName.isEmpty ? "Session" : rawName
 
         // External agents (heyllo_agent) do not yet get an approval card — answering
         // would show a card that looks like a Claude Code request. Reply immediately
@@ -485,15 +485,6 @@ final class HookServer: @unchecked Sendable {
     }
 
     // MARK: - Project name alias mapping
-
-    private func aliasProjectName(_ name: String) -> String {
-        let aliases: [String: String] = [
-            "notch-buddy":  "Notch Buddy",
-            "notchbuddy":   "Notch Buddy",
-            "notch_buddy":  "Notch Buddy",
-        ]
-        return aliases[name.lowercased()] ?? name
-    }
 
     // MARK: - French step labels
 
